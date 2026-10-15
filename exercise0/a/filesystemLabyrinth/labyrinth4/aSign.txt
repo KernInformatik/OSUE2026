@@ -1,0 +1,33 @@
+Just always take doorA, but that might take a while.
+
+There is a shortcut but it is broken.
+Let's check
+
+    ls -l
+
+to find out what's wrong with the brokenShortcut.
+
+And we can also use the power of while.
+
+Let's try if first: Go into doorA if it exists:
+
+    if [ -d doorA ]
+    then
+        cd doorA
+    fi
+
+The spaces around '-d' and the '[' and ']' are important.
+'[' and ']' are also called 'test'. See
+
+    man test
+
+if you want to know more. (Exit man by pressing q)
+
+A while loop looks like this:
+
+    while condition
+    do
+        echo "in loop"
+    done
+
+(stop an infinite loop using Ctrl-C)

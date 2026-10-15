@@ -1,0 +1,29 @@
+First type in this command
+
+      source tools.sh
+
+It will set up a few helper functions.
+
+Try navigating these "labyrinths".
+
+start with the first by going into it:
+
+	cd labyrinth1
+
+use "ls", "cd" and "cat" to find "Treasure.txt"
+When you find it, try the next labyrinth
+
+If you just use "ls", "cd" and "cat" (without >) you can not break anything. Don't worry.
+
+If your path gets really long, you may be able to make it shorter again by calling
+
+   cleanupWorkingDir
+
+(type "clean" and then press Tab, if you don't want to type the whole thing)
+cleanupWorkingDir will be helpful after you cleared the first labyrinth.
+
+if you like, you can try hardMode:
+
+   hardMode
+   hardMode yes
+

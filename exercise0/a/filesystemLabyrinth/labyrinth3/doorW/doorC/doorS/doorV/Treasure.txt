@@ -1,0 +1,9 @@
+We are in labyrinth3 but this is actually the Treasure for labyrinth6.
+
+As this is the last piece of Treasure, you solved all labyrinths.
+Try building your own labyrinth using the following commands
+
+    mkdir # to create directories
+    nano  # to create text files
+    ln    # to create symlinks (option -s)
+    mv    # to change the name and/or location of files and directories, we all make mistakes

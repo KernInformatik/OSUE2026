@@ -1,0 +1,13 @@
+Try cd-ing into one of the directories, for example:
+
+	cd doorA
+
+and then check what is in there using ls
+
+	ls
+
+if you want to come back here, do this:
+
+	cd ..
+
+(there has to be a [Space] between "cd" and "..)

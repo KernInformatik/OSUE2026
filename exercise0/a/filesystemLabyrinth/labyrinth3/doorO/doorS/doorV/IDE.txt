@@ -1,0 +1,7 @@
+An Integrated Development Environment. Useless if you know how to use vim, emacs or nano.
+
+I would like to
+
+  rm IDE.txt
+
+Let's keep looking for Treasure.

@@ -1,0 +1,8 @@
+There are many doors here. I once tried counting them and I think there are 12165 doors in this labyrinth.
+Too many to check all of them manually.
+
+If I was looking for Gold I would try using 'ls' to peek multiple doors at the same time.
+
+   ls door*/Gold.txt
+
+and then go where the Gold.txt was found.

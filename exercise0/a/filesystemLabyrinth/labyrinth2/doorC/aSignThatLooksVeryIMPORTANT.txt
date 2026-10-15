@@ -1,0 +1,9 @@
+This labyrinth is small, but where is the treasure?
+
+Maybe this hint can help:
+
+"There are things which may only be seen with
+
+	ls -a
+
+Maybe not here, but also check places where you have been before"
