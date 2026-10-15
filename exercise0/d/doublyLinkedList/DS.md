@@ -1,0 +1,1 @@
+The idea is pretty simple, head points as its previous ndoe to NULL, wheras the next node is a true node

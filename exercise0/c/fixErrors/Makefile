@@ -1,8 +1,8 @@
 .PHONY: all clean
 
-all: err1 err2
+all: err1 err2 err3 err4 err5
 
-err%: err%.c
+err%:err%.c
 	gcc -std=c99 -Wall -pedantic -o $@ $<
 
 clean:
