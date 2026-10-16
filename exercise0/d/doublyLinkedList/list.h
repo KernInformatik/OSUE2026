@@ -1,29 +1,44 @@
 #ifndef __LIST_H__
 #define __LIST_H__
 
-struct node_s
+typedef struct node_s
 {
     char *data;
     struct node_s *next;
     struct node_s *prev;
-};
+}DoublyLinkedList;
+
+typedef struct node_l
+{
+    char *data;
+    struct node_l *next;
+}LinkedList;
 
 /*This is bad code */
-typedef struct node_s node;
+//typedef struct node_s DoublyLinnkedList;
 
 // creation
-node *createHead(char *data);
-node *appendData(node *head, char *data);
-node *prepend(node *head, char *data);
+DoublyLinkedList *createHead(char *data);
+DoublyLinkedList *appendData(DoublyLinkedList *head, char *data);
+DoublyLinkedList *prepend(DoublyLinkedList *head, char *data);
 
 // print, one element per line
-void print(node *head);
+void print(DoublyLinkedList *head);
 
 // move
-node *forward(node *head);
-node *backward(node *head);
+DoublyLinkedList *forward(DoublyLinkedList *head);
+DoublyLinkedList *backward(DoublyLinkedList *head);
 
 // modify
-node *deleteNode(node *head);
-
+DoublyLinkedList *deleteNode(DoublyLinkedList *head);
+void ring(DoublyLinkedList *head);
+//static LinkedList *createHeadLinkedList(char *data);
+//static LinkedList *appendDataLinkedList(LinkedList *head, char *data);
+LinkedList *splitDLLToLinkedList(DoublyLinkedList *head);
+LinkedList *findLastNodeLinkedList(LinkedList *head);
+void ring(DoublyLinkedList *head);
+LinkedList *ringLL(DoublyLinkedList *head);
+LinkedList *convertDLL(DoublyLinkedList *head);
+LinkedList *splitRing(LinkedList *headRing);
+LinkedList *mergeLinkedList(LinkedList *List1, LinkedList *List2);
 #endif // __LIST_H__
