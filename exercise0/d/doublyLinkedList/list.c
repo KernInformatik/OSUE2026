@@ -3,6 +3,7 @@
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 // creation
 DoublyLinkedList *createHead(char *data)
@@ -35,9 +36,13 @@ static DoublyLinkedList *findLast(DoublyLinkedList *head)
 }
 
 /**
- * I thought this was perfectly working code, but nah this shit had also to be fixed fuck that
+ * @brief An old fashioned way to append Data to a DLL, use prepend() for appending data. create new DoublyLinkedList
+ * for data and append to the end of the list
+ * @deprecated
+ * @param head
+ * @param data
+ * @return DoublyLinkedList*
  */
-// create new DoublyLinkedList for data and append to the end of the list
 DoublyLinkedList *appendData(DoublyLinkedList *head, char *data)
 {
     DoublyLinkedList *newDoublyLinkedList = createHead(data);
@@ -66,8 +71,10 @@ static DoublyLinkedList *findFirst(DoublyLinkedList *head)
 DoublyLinkedList *prepend(DoublyLinkedList *head, char *data)
 {
     DoublyLinkedList *first = findFirst(head);
-    appendData(first, data);
-    return first;
+    DoublyLinkedList *newNode = createHead(data);
+    newNode->next = first;
+    first->prev = newNode;
+    return newNode;
 }
 
 // print, one element per line
@@ -150,7 +157,12 @@ DoublyLinkedList *deleteNode(DoublyLinkedList *head)
 }
 
 /**
- * @brief Linking the first and the last DoublyLinkedList together
+ * EXERCISE BEGINN
+ *
+ */
+
+/**
+ * @brief Linking the first and the last Node of the DoublyLinkedList together
  *
  * @param head
  */
@@ -189,6 +201,8 @@ static inline LinkedList *appendDataLinkedList(LinkedList *head, char *data)
     return newNode;
 }
 
+/*BEGIN OF LINKED LIST IMPLENTATION */
+
 /**
  * @brief splits a DLL into a  normal list LinkedList
  *
@@ -202,16 +216,13 @@ LinkedList *splitDLLToLinkedList(DoublyLinkedList *head)
     LinkedList *headLL = createHeadLinkedList(first->data);
     LinkedList *append = headLL;
 
-    for (DoublyLinkedList *c = first->next; c != NULL; c = c->next)
+    DoublyLinkedList *c = first->next;
+    while (c != first && c != NULL)
     {
         LinkedList *newEntry = createHeadLinkedList(c->data);
         append->next = newEntry;
         append = newEntry;
-
-        if (c == first)
-        {
-            break;
-        }
+        c = c->next;
     }
 
     return headLL; // returns the head of the linked list
@@ -223,13 +234,12 @@ LinkedList *findLastNodeLinkedList(LinkedList *head)
     {
         return NULL;
     }
-    LinkedList *rv = NULL;
 
     while (head->next != NULL)
     {
-        rv = (head = head->next);
+        head = head->next;
     }
-    return rv;
+    return head;
 }
 
 LinkedList *ringLL(DoublyLinkedList *head)
@@ -249,42 +259,39 @@ LinkedList *convertDLL(DoublyLinkedList *head)
 /*Assume headRing is a converted DLL */
 LinkedList *splitRing(LinkedList *headRing)
 {
-    LinkedList *firstNode = findLastNodeLinkedList(headRing)->next;
-
-    LinkedList *rv = createHeadLinkedList(firstNode->data);
-    LinkedList *append = rv;
-
-    for (LinkedList *c = firstNode; c->next != NULL; c = c->next)
+    assert(headRing != NULL);
+    LinkedList *c = headRing;
+    while (c->next != headRing)
     {
-        LinkedList *newEntry = createHeadLinkedList(c->data);
-        append->next = newEntry;
-        append = newEntry;
+        c = c->next;
     }
-
-    return rv;
+    c->next = NULL;
+    return headRing;
 }
 
 void destroyLinkedList(LinkedList *head)
 {
-    LinkedList *firstNode = findLastNodeLinkedList(head)->next;
 
-    for (LinkedList *c = firstNode; c->next != findLastNodeLinkedList(head); c = c->next)
+    while (head != NULL)
     {
-        LinkedList *node = firstNode;
-        free(node);
+        LinkedList *next = head->next;
+        free(head);
+        head = next;
     }
 }
 
 void destroyDataLinkedList(LinkedList *head)
 {
-    LinkedList *firstNode = findLastNodeLinkedList(head)->next;
 
-    for (LinkedList *c = firstNode; c->next != findLastNodeLinkedList(head); c = c->next)
+    while (head != NULL)
     {
-        LinkedList *node = firstNode;
-        free(node);
+        LinkedList *next = head->next;
+
+        free(head->data);
+        free(head);
+
+        head = next;
     }
-    destroyLinkedList(head);
 }
 /**
  * @brief merges two lists together, appends List2 to List1
@@ -297,31 +304,11 @@ void destroyDataLinkedList(LinkedList *head)
 LinkedList *mergeLinkedList(LinkedList *List1, LinkedList *List2)
 {
     assert(List1 != NULL);
-    assert(List2 != NULL);
 
-    if (findLastNodeLinkedList(List1)->next != NULL)
-    {
-        splitRing(findLastNodeLinkedList(List1)->next);
-    }
+    if (List2 == NULL)
+        return List1;
 
-    if (findLastNodeLinkedList(List2)->next != NULL)
-    {
-        splitRing(findLastNodeLinkedList(List2)->next);
-    }
+    findLastNodeLinkedList(List1)->next = List2;
 
-    LinkedList *rv = createHeadLinkedList(List1->data);
-
-    LinkedList *tmp = List1;
-
-    while (tmp != NULL)
-    {
-        if (tmp->next == NULL)
-        {
-            tmp = List2;
-        }
-        appendDataLinkedList(rv, tmp->data);
-        tmp = tmp->next;
-    }
-
-    return rv;
+    return List1;
 }
