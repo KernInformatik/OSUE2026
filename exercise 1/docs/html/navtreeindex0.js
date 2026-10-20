@@ -1,0 +1,23 @@
+var NAVTREEINDEX0 =
+{
+"____semaphore__interface_8h_source.html":[3,0,0,0],
+"annotated.html":[2,0],
+"classes.html":[2,1],
+"common_8h.html":[3,0,0,1],
+"common_8h_source.html":[3,0,0,1],
+"dir_68267d1309a1af8e8297ef4c3efbcdba.html":[3,0,1],
+"dir_d44c64559bbebec7f509842c48db8b23.html":[3,0,0],
+"files.html":[3,0],
+"generator_8c.html":[3,0,1,0],
+"graph_8h.html":[3,0,0,2],
+"graph_8h_source.html":[3,0,0,2],
+"index.html":[],
+"md_assets_2Notes.html":[1],
+"md_assets_2algorithm.html":[0],
+"md_assets_2algorithm.html#autotoc_md1":[0,0],
+"pages.html":[],
+"structEdge.html":[2,0,0],
+"structEdgeList.html":[2,0,1],
+"structNode.html":[2,0,2],
+"structshm.html":[2,0,3]
+};
