@@ -8,12 +8,11 @@ BIN_DIR = ../bin
 LIB_DIR = ../include
 
 # Directly implemented from DWM (suckless)
-
 all: options server generator
 options:
 	@echo build options:
 	@echo "CFLAGS			= ${CFLAGS}"
-	@echo "CC					= ${CC}"
+	@echo "CC				= ${CC}"
 
 .c.o:
 	${CC} -c {CFLAGS} $<
@@ -21,15 +20,7 @@ options:
 doc:
 	doxygen Doxyfile
 
-
-
 EXE_SUPERVISOR := $(BIN_DIR)/supervisor
 EXE_GENERATOR := $(BIN_DIR)/generator
 
 SRC_FILES := $(wildcard $(SRC_DIR)/*.c)
-
-
-
-
-
-
