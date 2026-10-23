@@ -9,7 +9,10 @@
  * @copyright Copyright (c) 2026
  *
  */
+#include "../include/__semaphore_interface.h"
 
 int main(int argc, char **argv)
 {
+    printf("Test!\n");
+    return 0;
 }

@@ -91,17 +91,25 @@ $(function(){initNavTree('structshm.html','','structshm-members'); });
   <div class="headertitle"><div class="title">shm Struct Reference</div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Layout of the shared memory.  
+ <a href="#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="____semaphore__interface_8h_source.html">__semaphore_interface.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-attribs" class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:a49f2251cdb3cda3529fa3ec32292304f" id="r_a49f2251cdb3cda3529fa3ec32292304f"><td class="memItemLeft"><a id="a49f2251cdb3cda3529fa3ec32292304f" name="a49f2251cdb3cda3529fa3ec32292304f"></a>
-struct <a class="el" href="structEdgeList.html">EdgeList</a>&#160;</td><td class="memItemRight"><b>data</b> [MAX_NUM_OF_DATA]</td></tr>
-<tr class="memitem:a27db92af0eacc888670e7ede8f208585" id="r_a27db92af0eacc888670e7ede8f208585"><td class="memItemLeft"><a id="a27db92af0eacc888670e7ede8f208585" name="a27db92af0eacc888670e7ede8f208585"></a>
-size_t&#160;</td><td class="memItemRight"><b>pos_writehead</b></td></tr>
-<tr class="memitem:a3b1bf5414bea9f1dfbd68d899cc93a96" id="r_a3b1bf5414bea9f1dfbd68d899cc93a96"><td class="memItemLeft"><a id="a3b1bf5414bea9f1dfbd68d899cc93a96" name="a3b1bf5414bea9f1dfbd68d899cc93a96"></a>
-size_t&#160;</td><td class="memItemRight"><b>pos_readhead</b></td></tr>
+<tr class="memitem:a3a7d2133d7b600b955bf7e885a2b5d37" id="r_a3a7d2133d7b600b955bf7e885a2b5d37"><td class="memItemLeft"><a id="a3a7d2133d7b600b955bf7e885a2b5d37" name="a3a7d2133d7b600b955bf7e885a2b5d37"></a>
+struct <a class="el" href="structEdgeList.html">EdgeList</a>&#160;</td><td class="memItemRight"><b>data</b> [MAX_BUFF_SIZE]</td></tr>
+<tr class="memitem:abb7beece2ae5477e38d921e21dacbdae" id="r_abb7beece2ae5477e38d921e21dacbdae"><td class="memItemLeft"><a id="abb7beece2ae5477e38d921e21dacbdae" name="abb7beece2ae5477e38d921e21dacbdae"></a>
+size_t&#160;</td><td class="memItemRight"><b>readhead</b></td></tr>
+<tr class="memitem:acaec05eea5de9ad95dd033090f337bdf" id="r_acaec05eea5de9ad95dd033090f337bdf"><td class="memItemLeft"><a id="acaec05eea5de9ad95dd033090f337bdf" name="acaec05eea5de9ad95dd033090f337bdf"></a>
+size_t&#160;</td><td class="memItemRight"><b>writehead</b></td></tr>
 </table>
-<hr/>The documentation for this struct was generated from the following file:<ul>
+<a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Layout of the shared memory. </p>
+<p>Each slot of the circular buffer holds one complete solution (a set of at most GRAPH_MAX_SOLUTION_EDGES edges). The graph itself is NOT stored here: every generator keeps its own copy. alive is set to 1 by the supervisor and to 0 to make all generators terminate. </p>
+</div><hr/>The documentation for this struct was generated from the following file:<ul>
 <li>include/<a class="el" href="____semaphore__interface_8h_source.html">__semaphore_interface.h</a></li>
 </ul>
 </div><!-- contents -->

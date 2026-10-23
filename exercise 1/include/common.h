@@ -37,18 +37,15 @@
 #include <time.h>
 #include <unistd.h>
 
-static void inline error(const char *msg)
+static inline void error_exit(const char *msg)
 {
     perror(msg);
+    exit(EXIT_FAILURE);
 }
 
-static void inline error_exit(const char *msg, int value)
+static inline void error_exit_failure(int val, const char *msg)
 {
-    error(msg);
-    if (value == -1)
-    {
-        _exit(EXIT_FAILURE);
-    }
+    if (val == -1)
+        error_exit(msg);
 }
-
 #endif
