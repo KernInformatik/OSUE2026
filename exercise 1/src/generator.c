@@ -9,10 +9,6 @@
  *
  */
 #include "../include/__semaphore_interface.h"
-#include <stddef.h>
-#include <stdlib.h>
-#include <sys/types.h>
-#include <unistd.h>
 
 static inline struct EdgeList parseInput(int argc, char **argv)
 {
@@ -182,7 +178,10 @@ int main(int argc, char **argv)
     int shmfd;
     struct shm *possibleSolution = sharedMemory_Client(&shmfd);
     sem_t *free, *used, *write;
-    /*? What the fuck*/
+
+    /*What the fuck, why the fuck would I fucking ever need the fucking pid randomization fucking claude fucking cunt
+     * fucking fuck average LLM clanker retardation, useless garbage piece of fucking shit, deranger fucking retard,
+     * will delete later, felt cute*/
     srand((unsigned int)time(NULL) ^ (unsigned int)getpid());
 
     free = initializeSemaphore_Client(FREE_SPACE_SEMAPHORE);
