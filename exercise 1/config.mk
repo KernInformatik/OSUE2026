@@ -1,8 +1,10 @@
+.DEFAULT_GOAL = all
+
 # compiler
 CC := gcc
 
 # flags
-COMMON_FLAGS := -std=c99 -pedantic -Wall -Werror -O2 \
+COMMON_FLAGS := -std=c99 -pedantic -Wall -O2 \
 	-D_DEFAULT_SOURCE -D_BSD_SOURCE -D_SVID_SOURCE \
 	-D_POSIX_C_SOURCE=200809L -g
 
@@ -31,7 +33,7 @@ GENERATOR := $(BIN_DIR)/generator
 SUPERVISOR := $(BIN_DIR)/supervisor
 
 # library
-LIB_SEM_INTF_NAME := semaphore_interface.so
+LIB_SEM_INTF_NAME := libsemaphore_interface.so
 LIB_SEM_INTF := $(BIN_DIR)/$(LIB_SEM_INTF_NAME)
 
 LIB_SRCS := $(wildcard $(LIB_DIR)/*.c)

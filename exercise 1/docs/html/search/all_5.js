@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['randomized_20algorithm_0',['Randomized algorithm',['../md_assets_2algorithm.html#autotoc_md1',1,'']]]
+  ['node_0',['Node',['../structNode.html',1,'']]],
+  ['notes_1',['Notes',['../md_assets_2Notes.html',1,'']]]
 ];

@@ -12,9 +12,10 @@
 #ifndef GRAPH_H
 #define GRAPH_H
 #include "../include/common.h"
+#include <sys/types.h>
 struct Node
 {
-    unsigned int node_number;
+    u_int8_t node_number : 4;
 };
 
 struct Edge
@@ -25,7 +26,8 @@ struct Edge
 
 struct EdgeList
 {
-    struct Edge NumberOfEdges[1028];
+    struct Edge NumberOfEdges[128];
+    ssize_t length;
 };
 
 #endif

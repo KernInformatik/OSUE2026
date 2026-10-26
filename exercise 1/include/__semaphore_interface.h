@@ -23,7 +23,7 @@ process
 
 #include "common.h"
 #include "graph.h"
-#define MAX_BUFF_SIZE 8
+#define MAX_BUFF_SIZE 7
 
 /**
  * @brief Layout of the shared memory.
@@ -38,13 +38,14 @@ struct shm
     struct EdgeList data[MAX_BUFF_SIZE];
     size_t readhead;
     size_t writehead;
+    sem_t free, used, write;
 };
 /*SHARED MEMORY OPTIONS */
 #define SHM_NAME "/e1251947_shm"
 #define SHM_OFLAG_SERVER (O_RDWR | O_CREAT | O_EXCL)
 #define SHM_OFLAG_CLIENT O_RDWR
 
-/* For Setting the  rwx permissions https://ftp.gnu.org/old-gnu/Manuals/glibc-2.2.3/html_node/libc_278.html*/
+/* For Setting the  rwx permissions https://ftp.gnu.org/old-gnu/Manuals/glibc-2.2.3/html_node/libc_278.html */
 #define SHM_MODE S_IRWXU
 #define MMP_PROT_FLAGS (PROT_READ | PROT_WRITE)
 #define MMP_FLAGS MAP_SHARED
@@ -152,7 +153,7 @@ void cleanSharedMemory_Client(struct shm *shm, int shmfd);
  * @param init_value The initial value of the semaphore.
  * @return sem_t*
  */
-sem_t *initializeSemaphore_Server(const char *sem_name, unsigned int init_value);
+sem_t initializeSemaphore_Server(const char *sem_name, unsigned int init_value);
 
 /**
  * @brief Opens an existing named semaphore (client side)
@@ -162,7 +163,7 @@ sem_t *initializeSemaphore_Server(const char *sem_name, unsigned int init_value)
  * @param sem_name The semaphore's name, matching one used by the server.
  * @return sem_t*
  */
-sem_t *initializeSemaphore_Client(const char *sem_name);
+sem_t initializeSemaphore_Client(const char *sem_name);
 
 /**
  * @brief Closes and unlinks a semaphore (server side)

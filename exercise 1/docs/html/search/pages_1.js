@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['notes_0',['Notes',['../md_assets_2Notes.html',1,'']]]
+  ['example_0',['Example',['../md_assets_2algorithm.html#autotoc_md2',1,'']]]
 ];

@@ -65,7 +65,7 @@ static inline int cleanSharedMemory(struct shm *shm, int *shmfd, bool isServer)
     return 0;
 }
 
-static inline sem_t *initializeSemaphore(const char *sem_name, unsigned int init_value, bool isServer)
+static inline sem_t initializeSemaphore(const char *sem_name, unsigned int init_value, bool isServer)
 {
     sem_t *rv = isServer ? sem_open(sem_name, OPEN_SEM_MODE_SERVER, OPEN_SEM_MODE, init_value)
                          : sem_open(sem_name, OPEN_SEM_MODE_CLIENT, OPEN_SEM_MODE, init_value);
@@ -74,7 +74,7 @@ static inline sem_t *initializeSemaphore(const char *sem_name, unsigned int init
         error_exit(OPENING_SEM_ERROR);
     }
 
-    return rv;
+    return *rv;
 }
 
 static inline void cleanSemaphore(const char *sem_name, sem_t *semaphore, bool isServer)
@@ -122,14 +122,14 @@ void cleanSharedMemory_Client(struct shm *shm, int shmfd)
 }
 
 /*See semaphore.h for documentation */
-sem_t *initializeSemaphore_Server(const char *sem_name, unsigned int init_value)
+sem_t initializeSemaphore_Server(const char *sem_name, unsigned int init_value)
 {
     return initializeSemaphore(sem_name, init_value, true);
 }
 
 /*See semaphore.h for documentation */
 
-sem_t *initializeSemaphore_Client(const char *sem_name)
+sem_t initializeSemaphore_Client(const char *sem_name)
 {
 
     return initializeSemaphore(sem_name, 0, false);

@@ -25,8 +25,9 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr id="projectrow">
+  <td id="projectlogo"><img alt="Logo" src="image.png"/></td>
   <td id="projectalign">
-   <div id="projectname">FB-Arc-Set
+   <div id="projectname">FB-Arc-Set<span id="projectnumber">&#160;1337</span>
    </div>
   </td>
  </tr>
@@ -105,6 +106,12 @@ struct <a class="el" href="structEdgeList.html">EdgeList</a>&#160;</td><td class
 size_t&#160;</td><td class="memItemRight"><b>readhead</b></td></tr>
 <tr class="memitem:acaec05eea5de9ad95dd033090f337bdf" id="r_acaec05eea5de9ad95dd033090f337bdf"><td class="memItemLeft"><a id="acaec05eea5de9ad95dd033090f337bdf" name="acaec05eea5de9ad95dd033090f337bdf"></a>
 size_t&#160;</td><td class="memItemRight"><b>writehead</b></td></tr>
+<tr class="memitem:a46e77475875f09b387239160afbc1013" id="r_a46e77475875f09b387239160afbc1013"><td class="memItemLeft"><a id="a46e77475875f09b387239160afbc1013" name="a46e77475875f09b387239160afbc1013"></a>
+sem_t&#160;</td><td class="memItemRight"><b>free</b></td></tr>
+<tr class="memitem:a6f817cd08eb2a118735a10d48f091955" id="r_a6f817cd08eb2a118735a10d48f091955"><td class="memItemLeft"><a id="a6f817cd08eb2a118735a10d48f091955" name="a6f817cd08eb2a118735a10d48f091955"></a>
+sem_t&#160;</td><td class="memItemRight"><b>used</b></td></tr>
+<tr class="memitem:af52f6a116d1296f859cdccbe41e37424" id="r_af52f6a116d1296f859cdccbe41e37424"><td class="memItemLeft"><a id="af52f6a116d1296f859cdccbe41e37424" name="af52f6a116d1296f859cdccbe41e37424"></a>
+sem_t&#160;</td><td class="memItemRight"><b>write</b></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Layout of the shared memory. </p>

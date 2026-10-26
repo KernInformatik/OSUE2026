@@ -26,7 +26,8 @@ var NAVTREE =
 [
   [ "FB-Arc-Set", "index.html", [
     [ "Algorithm", "md_assets_2algorithm.html", [
-      [ "Randomized algorithm", "md_assets_2algorithm.html#autotoc_md1", null ]
+      [ "Randomized algorithm", "md_assets_2algorithm.html#autotoc_md1", null ],
+      [ "Example", "md_assets_2algorithm.html#autotoc_md2", null ]
     ] ],
     [ "Notes", "md_assets_2Notes.html", null ],
     [ "Classes", "annotated.html", [
@@ -34,7 +35,11 @@ var NAVTREE =
       [ "Class Index", "classes.html", null ]
     ] ],
     [ "Files", "files.html", [
-      [ "File List", "files.html", "files_dup" ]
+      [ "File List", "files.html", "files_dup" ],
+      [ "File Members", "globals.html", [
+        [ "All", "globals.html", null ],
+        [ "Functions", "globals_func.html", null ]
+      ] ]
     ] ]
   ] ]
 ];

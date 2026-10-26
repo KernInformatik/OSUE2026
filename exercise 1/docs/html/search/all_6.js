@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['shm_0',['shm',['../structshm.html',1,'']]]
+  ['randomized_20algorithm_0',['Randomized algorithm',['../md_assets_2algorithm.html#autotoc_md1',1,'']]]
 ];

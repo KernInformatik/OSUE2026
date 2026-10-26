@@ -25,8 +25,9 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr id="projectrow">
+  <td id="projectlogo"><img alt="Logo" src="image.png"/></td>
   <td id="projectalign">
-   <div id="projectname">FB-Arc-Set
+   <div id="projectname">FB-Arc-Set<span id="projectnumber">&#160;1337</span>
    </div>
   </td>
  </tr>
@@ -91,9 +92,23 @@ $(function(){initNavTree('generator_8c.html','',''); });
   <div class="headertitle"><div class="title">generator.c File Reference</div></div>
 </div><!--header-->
 <div class="contents">
-<table class="memberdecls">
+<div class="textblock"><code>#include &quot;../include/__semaphore_interface.h&quot;</code><br />
+<code>#include &lt;stdlib.h&gt;</code><br />
+<code>#include &lt;sys/types.h&gt;</code><br />
+<code>#include &lt;unistd.h&gt;</code><br />
+</div><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-func-members" class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
+<tr class="memitem:a0b0aa737a896a42b3433d4e7e4bf9ea2" id="r_a0b0aa737a896a42b3433d4e7e4bf9ea2"><td class="memItemLeft"><a id="a0b0aa737a896a42b3433d4e7e4bf9ea2" name="a0b0aa737a896a42b3433d4e7e4bf9ea2"></a>
+static struct <a class="el" href="structEdgeList.html">EdgeList</a>&#160;</td><td class="memItemRight"><b>parseInput</b> (int argc, char **argv)</td></tr>
+<tr class="memitem:a1c671de3ea86e2317d188894e4c0b4c2" id="r_a1c671de3ea86e2317d188894e4c0b4c2"><td class="memItemLeft"><a id="a1c671de3ea86e2317d188894e4c0b4c2" name="a1c671de3ea86e2317d188894e4c0b4c2"></a>
+static void&#160;</td><td class="memItemRight"><b>shuffleVertexes</b> (struct <a class="el" href="structNode.html">Node</a> NodeList[], size_t length)</td></tr>
+<tr class="memitem:a63d19c10959f7d1bc77a217d23afea32" id="r_a63d19c10959f7d1bc77a217d23afea32"><td class="memItemLeft"><a id="a63d19c10959f7d1bc77a217d23afea32" name="a63d19c10959f7d1bc77a217d23afea32"></a>
+static size_t&#160;</td><td class="memItemRight"><b>position</b> (struct <a class="el" href="structNode.html">Node</a> *NodeList, uint valueNode, size_t length)</td></tr>
+<tr class="memitem:a5473ec5924a4e18130a3ac87f64645a6" id="r_a5473ec5924a4e18130a3ac87f64645a6"><td class="memItemLeft"><a id="a5473ec5924a4e18130a3ac87f64645a6" name="a5473ec5924a4e18130a3ac87f64645a6"></a>
+static struct <a class="el" href="structEdgeList.html">EdgeList</a> const&#160;</td><td class="memItemRight"><b>generateSolution</b> (const struct <a class="el" href="structEdgeList.html">EdgeList</a> *restrict graph)</td></tr>
+<tr class="memitem:afed5e65aca2063be58eb0b422192d397" id="r_afed5e65aca2063be58eb0b422192d397"><td class="memItemLeft"><a id="afed5e65aca2063be58eb0b422192d397" name="afed5e65aca2063be58eb0b422192d397"></a>
+void&#160;</td><td class="memItemRight"><b>writeSolution</b> (const struct <a class="el" href="structEdgeList.html">EdgeList</a> graph, struct <a class="el" href="structshm.html">shm</a> *sharedMemory, sem_t free, sem_t used, sem_t write)</td></tr>
 <tr class="memitem:a3c04138a5bfe5d72780bb7e82a18e627" id="r_a3c04138a5bfe5d72780bb7e82a18e627"><td class="memItemLeft"><a id="a3c04138a5bfe5d72780bb7e82a18e627" name="a3c04138a5bfe5d72780bb7e82a18e627"></a>
 int&#160;</td><td class="memItemRight"><b>main</b> (int argc, char **argv)</td></tr>
 </table>
