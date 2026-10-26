@@ -9,6 +9,7 @@
  *
  */
 #include "../include/__semaphore_interface.h"
+#include <stddef.h>
 #include <stdlib.h>
 #include <sys/types.h>
 #include <unistd.h>
@@ -23,7 +24,7 @@ static inline struct EdgeList parseInput(int argc, char **argv)
         error_exit("too few arguments");
     }
 
-    if ((argc - 1) > 1028)
+    if ((argc - 1) > 256)
     {
         error_exit("too many arguments");
     }
@@ -96,8 +97,8 @@ static inline struct EdgeList parseInput(int argc, char **argv)
         char *first = strtok_r(string, "-", &savePtr);
         char *second = strtok_r(NULL, "-", &savePtr);
 
-        rv.NumberOfEdges->u.node_number = strtol(first, NULL, 10);
-        rv.NumberOfEdges->v.node_number = strtol(second, NULL, 10);
+        rv.NumberOfEdges[i - 1].u.node_number = strtol(first, NULL, 10);
+        rv.NumberOfEdges[i - 1].v.node_number = strtol(second, NULL, 10);
         free(string);
     }
     rv.length = (ssize_t)(argc - 1);
@@ -151,8 +152,8 @@ static inline struct EdgeList const generateSolution(const struct EdgeList *rest
 
     for (int i = 0; i < graph->length; i++)
     {
-        int pu = position(NodeList, graph->NumberOfEdges[i].u.node_number, graph->length * 2);
-        int pv = position(NodeList, graph->NumberOfEdges[i].v.node_number, graph->length * 2);
+        size_t pu = position(NodeList, graph->NumberOfEdges[i].u.node_number, graph->length * 2);
+        size_t pv = position(NodeList, graph->NumberOfEdges[i].v.node_number, graph->length * 2);
 
         if (pu > pv)
         {
@@ -180,17 +181,20 @@ int main(int argc, char **argv)
 {
     int shmfd;
     struct shm *possibleSolution = sharedMemory_Client(&shmfd);
-    possibleSolution->free = initializeSemaphore_Client(FREE_SPACE_SEMAPHORE);
-    possibleSolution->used = initializeSemaphore_Client(USED_SPACE_SEMAPHORE);
-    possibleSolution->write = initializeSemaphore_Client(WRITE_SPACE_SEMAPHORE);
+    sem_t *free, *used, *write;
+    /*? What the fuck*/
+    srand((unsigned int)time(NULL) ^ (unsigned int)getpid());
+
+    free = initializeSemaphore_Client(FREE_SPACE_SEMAPHORE);
+    used = initializeSemaphore_Client(USED_SPACE_SEMAPHORE);
+    write = initializeSemaphore_Client(WRITE_SPACE_SEMAPHORE);
 
     struct EdgeList test = parseInput(argc, argv);
-    writeSolution(generateSolution(&test), possibleSolution, possibleSolution->free, possibleSolution->used,
-                  possibleSolution->write);
+    writeSolution(generateSolution(&test), possibleSolution, *free, *used, *write);
 
-    cleanSemaphore_Client(&possibleSolution->free);
-    cleanSemaphore_Client(&possibleSolution->used);
-    cleanSemaphore_Client(&possibleSolution->write);
+    cleanSemaphore_Client(free);
+    cleanSemaphore_Client(used);
+    cleanSemaphore_Client(write);
     cleanSharedMemory_Client(possibleSolution, shmfd);
     return 0;
 }

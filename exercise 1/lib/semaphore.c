@@ -11,18 +11,30 @@
 #include "../include/__semaphore_interface.h"
 
 volatile sig_atomic_t quit = false;
-
-void onSignal(int sig, siginfo_t *info, void *unused)
+// static sem_t *wakeSem = NULL;
+static void onSignal(int sig, siginfo_t *info, void *unused)
 {
-    quit = true;
+    (void)sig;
+    (void)info;
+    (void)unused;
+    int saved = errno;
+    quit = 1;
+    errno = saved;
 }
 
 void initSignalHandler()
 {
+
     struct sigaction sa;
-    sa.sa_flags = SA_SIGINFO;
+    memset(&sa, 0, sizeof(sa));
+    sa.sa_flags = SA_SIGINFO; /* no SA_RESTART */
     sigemptyset(&sa.sa_mask);
     sa.sa_sigaction = onSignal;
+
+    if (sigaction(SIGINT, &sa, NULL) == -1)
+        error_exit("sigaction SIGINT");
+    if (sigaction(SIGTERM, &sa, NULL) == -1)
+        error_exit("sigaction SIGTERM");
 }
 
 /*BEGINE HELPER FUNCTIONS*/
@@ -65,7 +77,7 @@ static inline int cleanSharedMemory(struct shm *shm, int *shmfd, bool isServer)
     return 0;
 }
 
-static inline sem_t initializeSemaphore(const char *sem_name, unsigned int init_value, bool isServer)
+static inline sem_t *initializeSemaphore(const char *sem_name, unsigned int init_value, bool isServer)
 {
     sem_t *rv = isServer ? sem_open(sem_name, OPEN_SEM_MODE_SERVER, OPEN_SEM_MODE, init_value)
                          : sem_open(sem_name, OPEN_SEM_MODE_CLIENT, OPEN_SEM_MODE, init_value);
@@ -74,7 +86,7 @@ static inline sem_t initializeSemaphore(const char *sem_name, unsigned int init_
         error_exit(OPENING_SEM_ERROR);
     }
 
-    return *rv;
+    return rv;
 }
 
 static inline void cleanSemaphore(const char *sem_name, sem_t *semaphore, bool isServer)
@@ -122,14 +134,14 @@ void cleanSharedMemory_Client(struct shm *shm, int shmfd)
 }
 
 /*See semaphore.h for documentation */
-sem_t initializeSemaphore_Server(const char *sem_name, unsigned int init_value)
+sem_t *initializeSemaphore_Server(const char *sem_name, unsigned int init_value)
 {
     return initializeSemaphore(sem_name, init_value, true);
 }
 
 /*See semaphore.h for documentation */
 
-sem_t initializeSemaphore_Client(const char *sem_name)
+sem_t *initializeSemaphore_Client(const char *sem_name)
 {
 
     return initializeSemaphore(sem_name, 0, false);

@@ -38,7 +38,6 @@ struct shm
     struct EdgeList data[MAX_BUFF_SIZE];
     size_t readhead;
     size_t writehead;
-    sem_t free, used, write;
 };
 /*SHARED MEMORY OPTIONS */
 #define SHM_NAME "/e1251947_shm"
@@ -153,7 +152,7 @@ void cleanSharedMemory_Client(struct shm *shm, int shmfd);
  * @param init_value The initial value of the semaphore.
  * @return sem_t*
  */
-sem_t initializeSemaphore_Server(const char *sem_name, unsigned int init_value);
+sem_t *initializeSemaphore_Server(const char *sem_name, unsigned int init_value);
 
 /**
  * @brief Opens an existing named semaphore (client side)
@@ -163,7 +162,7 @@ sem_t initializeSemaphore_Server(const char *sem_name, unsigned int init_value);
  * @param sem_name The semaphore's name, matching one used by the server.
  * @return sem_t*
  */
-sem_t initializeSemaphore_Client(const char *sem_name);
+sem_t *initializeSemaphore_Client(const char *sem_name);
 
 /**
  * @brief Closes and unlinks a semaphore (server side)
@@ -184,6 +183,6 @@ void cleanSemaphore_Server(sem_t *semaphore, const char *sem_name);
  */
 void cleanSemaphore_Client(sem_t *semaphore);
 
-void onSignal(int sig, siginfo_t *si, void *unused);
-void initSignalHandler(void);
+static void onSignal(int sig, siginfo_t *info, void *unused);
+void initSignalHandler();
 #endif

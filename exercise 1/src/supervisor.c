@@ -50,10 +50,10 @@ int main(int argc, char **argv)
 {
     int shmfd;
     struct shm *sharedMemory = sharedMemory_Server(&shmfd);
-
-    sharedMemory->free = initializeSemaphore_Server(FREE_SPACE_SEMAPHORE, FREE_SPACE_SEMAPHORE_SIZE);
-    sharedMemory->write = initializeSemaphore_Server(WRITE_SPACE_SEMAPHORE, WRITE_SPACE_SEMAPHORE_SIZE);
-    sharedMemory->used = initializeSemaphore_Server(USED_SPACE_SEMAPHORE, USED_SPACE_SEMAPHORE_SIZE);
+    sem_t *free, *used, *write;
+    free = initializeSemaphore_Server(FREE_SPACE_SEMAPHORE, FREE_SPACE_SEMAPHORE_SIZE);
+    write = initializeSemaphore_Server(WRITE_SPACE_SEMAPHORE, WRITE_SPACE_SEMAPHORE_SIZE);
+    used = initializeSemaphore_Server(USED_SPACE_SEMAPHORE, USED_SPACE_SEMAPHORE_SIZE);
 
     initSignalHandler();
 
@@ -94,29 +94,28 @@ int main(int argc, char **argv)
 
     while (!quit)
     {
-        if (sem_wait(&sharedMemory->used) == -1)
+        if (sem_wait(used) == -1)
         {
-            fprintf(stdout, "Supervisor woke up %zu\n", sharedMemory->readhead);
-            if (quit)
-            {
-                break;
-            }
             if (errno == EINTR)
             {
                 continue;
             }
             error_exit("Couldn't initialize sempahore");
         }
+        if (quit)
+        {
+            break;
+        }
         readSolution(sharedMemory);
-        if (sem_post(&sharedMemory->free) == -1)
+        if (sem_post(free) == -1)
         {
             error_exit("sem_post Server side");
         }
     }
 
-    cleanSemaphore_Server(&sharedMemory->free, FREE_SPACE_SEMAPHORE);
-    cleanSemaphore_Server(&sharedMemory->used, USED_SPACE_SEMAPHORE);
-    cleanSemaphore_Server(&sharedMemory->write, WRITE_SPACE_SEMAPHORE);
+    cleanSemaphore_Server(free, FREE_SPACE_SEMAPHORE);
+    cleanSemaphore_Server(used, USED_SPACE_SEMAPHORE);
+    cleanSemaphore_Server(write, WRITE_SPACE_SEMAPHORE);
 
     cleanSharedMemory_Server(sharedMemory, shmfd);
 }
