@@ -99,16 +99,16 @@ $(function(){initNavTree('semaphore_8c.html','',''); });
 </div><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-func-members" class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a8f1acd60c3ff9ed7fc96162ead080b44" id="r_a8f1acd60c3ff9ed7fc96162ead080b44"><td class="memItemLeft"><a id="a8f1acd60c3ff9ed7fc96162ead080b44" name="a8f1acd60c3ff9ed7fc96162ead080b44"></a>
-void&#160;</td><td class="memItemRight"><b>onSignal</b> (int sig, siginfo_t *info, void *unused)</td></tr>
+<tr class="memitem:a2205976dbd300ec659949bf24d7333a5" id="r_a2205976dbd300ec659949bf24d7333a5"><td class="memItemLeft"><a id="a2205976dbd300ec659949bf24d7333a5" name="a2205976dbd300ec659949bf24d7333a5"></a>
+static void&#160;</td><td class="memItemRight"><b>onSignal</b> (int sig, siginfo_t *info, void *unused)</td></tr>
 <tr class="memitem:af893bf71fd87078bdc6c3ec44e0ea809" id="r_af893bf71fd87078bdc6c3ec44e0ea809"><td class="memItemLeft"><a id="af893bf71fd87078bdc6c3ec44e0ea809" name="af893bf71fd87078bdc6c3ec44e0ea809"></a>
 void&#160;</td><td class="memItemRight"><b>initSignalHandler</b> ()</td></tr>
 <tr class="memitem:acffac2508756a977366f9342720eead8" id="r_acffac2508756a977366f9342720eead8"><td class="memItemLeft"><a id="acffac2508756a977366f9342720eead8" name="acffac2508756a977366f9342720eead8"></a>
 static struct <a class="el" href="structshm.html">shm</a> *&#160;</td><td class="memItemRight"><b>sharedMemory</b> (int *shmfd, bool isServer)</td></tr>
 <tr class="memitem:a84daf186cc573c498b939783a92955fe" id="r_a84daf186cc573c498b939783a92955fe"><td class="memItemLeft"><a id="a84daf186cc573c498b939783a92955fe" name="a84daf186cc573c498b939783a92955fe"></a>
 static int&#160;</td><td class="memItemRight"><b>cleanSharedMemory</b> (struct <a class="el" href="structshm.html">shm</a> *<a class="el" href="structshm.html">shm</a>, int *shmfd, bool isServer)</td></tr>
-<tr class="memitem:a262427c3f7647e96e58571975e3819c8" id="r_a262427c3f7647e96e58571975e3819c8"><td class="memItemLeft"><a id="a262427c3f7647e96e58571975e3819c8" name="a262427c3f7647e96e58571975e3819c8"></a>
-static sem_t&#160;</td><td class="memItemRight"><b>initializeSemaphore</b> (const char *sem_name, unsigned int init_value, bool isServer)</td></tr>
+<tr class="memitem:a3e3e2e3192792c08bba042fc1187300b" id="r_a3e3e2e3192792c08bba042fc1187300b"><td class="memItemLeft"><a id="a3e3e2e3192792c08bba042fc1187300b" name="a3e3e2e3192792c08bba042fc1187300b"></a>
+static sem_t *&#160;</td><td class="memItemRight"><b>initializeSemaphore</b> (const char *sem_name, unsigned int init_value, bool isServer)</td></tr>
 <tr class="memitem:a0137bd38d5e42fafd5d6d16473742641" id="r_a0137bd38d5e42fafd5d6d16473742641"><td class="memItemLeft"><a id="a0137bd38d5e42fafd5d6d16473742641" name="a0137bd38d5e42fafd5d6d16473742641"></a>
 static void&#160;</td><td class="memItemRight"><b>cleanSemaphore</b> (const char *sem_name, sem_t *semaphore, bool isServer)</td></tr>
 <tr class="memitem:ad95a18e1f928efae65d7056b8af08f2d" id="r_ad95a18e1f928efae65d7056b8af08f2d"><td class="memItemLeft">struct <a class="el" href="structshm.html">shm</a> *&#160;</td><td class="memItemRight"><a class="el" href="#ad95a18e1f928efae65d7056b8af08f2d">sharedMemory_Server</a> (int *shmfd)</td></tr>
@@ -119,10 +119,10 @@ static void&#160;</td><td class="memItemRight"><b>cleanSemaphore</b> (const char
 <tr class="memdesc:aee941fa19378bd97b0b90121e8ba17f9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Unmaps, closes, and unlinks the shared memory segment (server side).  <br /></td></tr>
 <tr class="memitem:a6644a2c8a47075c20c1df44b7c815643" id="r_a6644a2c8a47075c20c1df44b7c815643"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a6644a2c8a47075c20c1df44b7c815643">cleanSharedMemory_Client</a> (struct <a class="el" href="structshm.html">shm</a> *<a class="el" href="structshm.html">shm</a>, int shmfd)</td></tr>
 <tr class="memdesc:a6644a2c8a47075c20c1df44b7c815643"><td class="mdescLeft">&#160;</td><td class="mdescRight">Unmaps and closes the shared memory segment (client side).  <br /></td></tr>
-<tr class="memitem:a2b1bb0ea82c46a68539af351d738f629" id="r_a2b1bb0ea82c46a68539af351d738f629"><td class="memItemLeft">sem_t&#160;</td><td class="memItemRight"><a class="el" href="#a2b1bb0ea82c46a68539af351d738f629">initializeSemaphore_Server</a> (const char *sem_name, unsigned int init_value)</td></tr>
-<tr class="memdesc:a2b1bb0ea82c46a68539af351d738f629"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates and initializes a named semaphore (server side).  <br /></td></tr>
-<tr class="memitem:a70a578f42ca827afd3b2d802c8832ab1" id="r_a70a578f42ca827afd3b2d802c8832ab1"><td class="memItemLeft">sem_t&#160;</td><td class="memItemRight"><a class="el" href="#a70a578f42ca827afd3b2d802c8832ab1">initializeSemaphore_Client</a> (const char *sem_name)</td></tr>
-<tr class="memdesc:a70a578f42ca827afd3b2d802c8832ab1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Opens an existing named semaphore (client side).  <br /></td></tr>
+<tr class="memitem:a26b3c6b45e505e5cc8a9df67b93d8bef" id="r_a26b3c6b45e505e5cc8a9df67b93d8bef"><td class="memItemLeft">sem_t *&#160;</td><td class="memItemRight"><a class="el" href="#a26b3c6b45e505e5cc8a9df67b93d8bef">initializeSemaphore_Server</a> (const char *sem_name, unsigned int init_value)</td></tr>
+<tr class="memdesc:a26b3c6b45e505e5cc8a9df67b93d8bef"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates and initializes a named semaphore (server side).  <br /></td></tr>
+<tr class="memitem:a5aca5daac24cb345fb7b138b19bb5603" id="r_a5aca5daac24cb345fb7b138b19bb5603"><td class="memItemLeft">sem_t *&#160;</td><td class="memItemRight"><a class="el" href="#a5aca5daac24cb345fb7b138b19bb5603">initializeSemaphore_Client</a> (const char *sem_name)</td></tr>
+<tr class="memdesc:a5aca5daac24cb345fb7b138b19bb5603"><td class="mdescLeft">&#160;</td><td class="mdescRight">Opens an existing named semaphore (client side).  <br /></td></tr>
 <tr class="memitem:a6006fcec365bff5b94a83213ecadd1e5" id="r_a6006fcec365bff5b94a83213ecadd1e5"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a6006fcec365bff5b94a83213ecadd1e5">cleanSemaphore_Server</a> (sem_t *semaphore, const char *sem_name)</td></tr>
 <tr class="memdesc:a6006fcec365bff5b94a83213ecadd1e5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Closes and unlinks a semaphore (server side).  <br /></td></tr>
 <tr class="memitem:ad6ec67397f2c79c265f49584bc0d9933" id="r_ad6ec67397f2c79c265f49584bc0d9933"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#ad6ec67397f2c79c265f49584bc0d9933">cleanSemaphore_Client</a> (sem_t *semaphore)</td></tr>
@@ -259,14 +259,14 @@ volatile sig_atomic_t&#160;</td><td class="memItemRight"><b>quit</b> = false</td
 
 </div>
 </div>
-<a id="a70a578f42ca827afd3b2d802c8832ab1" name="a70a578f42ca827afd3b2d802c8832ab1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a70a578f42ca827afd3b2d802c8832ab1">&#9670;&#160;</a></span>initializeSemaphore_Client()</h2>
+<a id="a5aca5daac24cb345fb7b138b19bb5603" name="a5aca5daac24cb345fb7b138b19bb5603"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5aca5daac24cb345fb7b138b19bb5603">&#9670;&#160;</a></span>initializeSemaphore_Client()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">sem_t initializeSemaphore_Client </td>
+          <td class="memname">sem_t * initializeSemaphore_Client </td>
           <td>(</td>
           <td class="paramtype">const char *</td>          <td class="paramname"><span class="paramname"><em>sem_name</em></span></td><td>)</td>
           <td></td>
@@ -286,14 +286,14 @@ volatile sig_atomic_t&#160;</td><td class="memItemRight"><b>quit</b> = false</td
 
 </div>
 </div>
-<a id="a2b1bb0ea82c46a68539af351d738f629" name="a2b1bb0ea82c46a68539af351d738f629"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2b1bb0ea82c46a68539af351d738f629">&#9670;&#160;</a></span>initializeSemaphore_Server()</h2>
+<a id="a26b3c6b45e505e5cc8a9df67b93d8bef" name="a26b3c6b45e505e5cc8a9df67b93d8bef"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a26b3c6b45e505e5cc8a9df67b93d8bef">&#9670;&#160;</a></span>initializeSemaphore_Server()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">sem_t initializeSemaphore_Server </td>
+          <td class="memname">sem_t * initializeSemaphore_Server </td>
           <td>(</td>
           <td class="paramtype">const char *</td>          <td class="paramname"><span class="paramname"><em>sem_name</em></span>, </td>
         </tr>

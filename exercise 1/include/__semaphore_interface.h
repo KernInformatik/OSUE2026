@@ -38,6 +38,7 @@ struct shm
     struct EdgeList data[MAX_BUFF_SIZE];
     size_t readhead;
     size_t writehead;
+    int status;
 };
 /*SHARED MEMORY OPTIONS */
 #define SHM_NAME "/e1251947_shm"

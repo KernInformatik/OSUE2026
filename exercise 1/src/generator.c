@@ -9,6 +9,15 @@
  *
  */
 #include "../include/__semaphore_interface.h"
+#include <stdio.h>
+
+static inline void usage(void)
+{
+    printf("Usage: ./generator Edges...");
+    printf("An edge consists of a number u a dash and a node v. For example 0-1 is a valid edge, after listing an "
+           "another edge, a space is needed");
+    return;
+}
 
 static inline struct EdgeList parseInput(int argc, char **argv)
 {
@@ -17,11 +26,13 @@ static inline struct EdgeList parseInput(int argc, char **argv)
     /* Error checking*/
     if ((argc - 1) < 1)
     {
+        printBuddha();
         error_exit("too few arguments");
     }
 
     if ((argc - 1) > 256)
     {
+        printBuddha();
         error_exit("too many arguments");
     }
 
@@ -31,6 +42,7 @@ static inline struct EdgeList parseInput(int argc, char **argv)
         {
             if (strcmp(argv[i], argv[j]) == 0)
             {
+                printBuddha();
                 error_exit("duplicate arguments");
             }
         }
@@ -40,6 +52,7 @@ static inline struct EdgeList parseInput(int argc, char **argv)
     {
         if (strchr(argv[i], '-') == NULL)
         {
+            printBuddha();
             error_exit("no dash in argument");
         }
     }
@@ -48,6 +61,7 @@ static inline struct EdgeList parseInput(int argc, char **argv)
     {
         if (strchr(argv[i], '-') != strrchr(argv[i], '-'))
         {
+            printBuddha();
             error_exit("to many dashes in argument");
         }
     }
@@ -63,6 +77,7 @@ static inline struct EdgeList parseInput(int argc, char **argv)
 
         if ((first == NULL) || (second == NULL))
         {
+            printBuddha();
             error_exit("missing nodes in arguments");
         }
 
@@ -70,6 +85,7 @@ static inline struct EdgeList parseInput(int argc, char **argv)
         {
             if (!isdigit(first[i]))
             {
+                printBuddha();
                 error_exit("No digits in argument node");
             }
         }
@@ -78,6 +94,7 @@ static inline struct EdgeList parseInput(int argc, char **argv)
         {
             if (!isdigit(second[i]))
             {
+                printBuddha();
                 error_exit("No digits in argument node");
             }
         }
@@ -136,15 +153,18 @@ static inline struct EdgeList const generateSolution(const struct EdgeList *rest
 
     for (size_t i = 0; i < graph->length; ++i)
     {
-        struct Node edge[2] = {graph->NumberOfEdges->u, graph->NumberOfEdges->v};
+        struct Node edge[2] = {graph->NumberOfEdges[i].u, graph->NumberOfEdges[i].v};
 
         for (size_t j = 0; j < 2; ++j)
         {
-            NodeList[pos++] = edge[j];
+            if (position(NodeList, edge[j].node_number, counter) == -1)
+            {
+                NodeList[pos++] = edge[j];
+            }
         }
     }
 
-    shuffleVertexes(NodeList, graph->length * 2);
+    shuffleVertexes(NodeList, counter);
 
     for (int i = 0; i < graph->length; i++)
     {
@@ -159,41 +179,53 @@ static inline struct EdgeList const generateSolution(const struct EdgeList *rest
 
     rv.length = counter;
 
+    printf("rv length = %zd\n", rv.length);
+
     return rv;
 }
 
-void writeSolution(const struct EdgeList graph, struct shm *sharedMemory, sem_t free, sem_t used, sem_t write)
+void writeSolution(const struct EdgeList graph, struct shm *sharedMemory, sem_t *free, sem_t *used, sem_t *write)
 {
-    sem_wait(&write);
-    sem_wait(&free);
-    sharedMemory->data[sharedMemory->writehead] = graph;
-    sem_post(&write);
-    sem_post(&used);
-    sharedMemory->writehead = (sharedMemory->writehead + 1) % MAX_BUFF_SIZE;
-    fprintf(stdout, "Wrote %zu Edges at slot %zu\n", graph.length, sharedMemory->writehead);
+    if (sharedMemory->status == 1)
+    {
+
+        if (sem_wait(free) == -1)
+            error_exit("sem_wait (free)");
+        if (sem_wait(write) == -1)
+            error_exit("sem_wait (write)");
+        sharedMemory->data[sharedMemory->writehead] = graph;
+        sharedMemory->writehead = (sharedMemory->writehead + 1) % MAX_BUFF_SIZE;
+
+        if (sem_post(write) == -1)
+            error_exit("sem_post (write)");
+        if (sem_post(used) == -1)
+            error_exit("sem_post (used)");
+
+        fprintf(stdout, "Wrote %zu Edges at slot %zu\n", graph.length, sharedMemory->writehead);
+    }
 }
 
 int main(int argc, char **argv)
 {
     int shmfd;
     struct shm *possibleSolution = sharedMemory_Client(&shmfd);
-    sem_t *free, *used, *write;
+    sem_t *freeSem, *usedSem, *writeSem;
 
     /*What the fuck, why the fuck would I fucking ever need the fucking pid randomization fucking claude fucking cunt
      * fucking fuck average LLM clanker retardation, useless garbage piece of fucking shit, deranger fucking retard,
      * will delete later, felt cute*/
     srand((unsigned int)time(NULL) ^ (unsigned int)getpid());
 
-    free = initializeSemaphore_Client(FREE_SPACE_SEMAPHORE);
-    used = initializeSemaphore_Client(USED_SPACE_SEMAPHORE);
-    write = initializeSemaphore_Client(WRITE_SPACE_SEMAPHORE);
+    freeSem = initializeSemaphore_Client(FREE_SPACE_SEMAPHORE);
+    usedSem = initializeSemaphore_Client(USED_SPACE_SEMAPHORE);
+    writeSem = initializeSemaphore_Client(WRITE_SPACE_SEMAPHORE);
 
     struct EdgeList test = parseInput(argc, argv);
-    writeSolution(generateSolution(&test), possibleSolution, *free, *used, *write);
+    writeSolution(generateSolution(&test), possibleSolution, freeSem, usedSem, writeSem);
 
-    cleanSemaphore_Client(free);
-    cleanSemaphore_Client(used);
-    cleanSemaphore_Client(write);
+    cleanSemaphore_Client(freeSem);
+    cleanSemaphore_Client(usedSem);
+    cleanSemaphore_Client(writeSem);
     cleanSharedMemory_Client(possibleSolution, shmfd);
     return 0;
 }
