@@ -26,7 +26,7 @@ void initSignalHandler()
 {
 
     struct sigaction sa;
-    memset(&sa, 0, sizeof(sa));
+    // memset(&sa, 0, sizeof(sa));
     sa.sa_flags = SA_SIGINFO; /* no SA_RESTART */
     sigemptyset(&sa.sa_mask);
     sa.sa_sigaction = onSignal;

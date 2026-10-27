@@ -39,7 +39,7 @@
 
 static inline void error_exit(const char *msg)
 {
-    perror(msg);
+    fprintf(stderr, "%s\n", msg);
     exit(EXIT_FAILURE);
 }
 
@@ -49,7 +49,7 @@ static inline void error_exit_failure(int val, const char *msg)
         error_exit(msg);
 }
 
-static void printBuddha()
+static inline void printBuddha()
 {
     printf("                 _ooOoo_\n"
            "                  o8888888o\n"
@@ -70,7 +70,7 @@ static void printBuddha()
            "======`-.____`-.___\\_____/___.-`____.-'======\n"
            "                   `=---='\n"
            "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"
-           "         佛祖保佑       永無 BUG\n");
+           "         I AM KING TERRY THE TERRIBLE佛祖保佑       永無 BUG\n");
     return;
 }
 

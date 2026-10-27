@@ -10,7 +10,8 @@ process
  *          must call the *_create functions before any client calls *_connect,
  *          since the server is responsible for allocating the underlying
  *          resources. There must be exactly one server; there may be many
- *          clients. This was directely impelmented from my own repository on Kerninformatik/libsem
+ *          clients. This was directely impelmented from my own repository on Kerninformatik/libsem. Yet it has been
+altered to fit the needs of this project.
  * @version 0.1
 
  * @date 2026-09-16
@@ -184,6 +185,6 @@ void cleanSemaphore_Server(sem_t *semaphore, const char *sem_name);
  */
 void cleanSemaphore_Client(sem_t *semaphore);
 
-static void onSignal(int sig, siginfo_t *info, void *unused);
-void initSignalHandler();
+// void onSignal(int sig, siginfo_t *info, void *unused);
+void initSignalHandler(void);
 #endif

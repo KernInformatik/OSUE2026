@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['generator_2ec_0',['generator.c',['../generator_8c.html',1,'']]],
-  ['graph_2eh_1',['graph.h',['../graph_8h.html',1,'']]]
+  ['edge_0',['Edge',['../structEdge.html',1,'']]],
+  ['edgelist_1',['EdgeList',['../structEdgeList.html',1,'']]],
+  ['example_2',['Example',['../md_assets_2algorithm.html#autotoc_md2',1,'']]]
 ];

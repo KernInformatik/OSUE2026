@@ -124,7 +124,7 @@ $(function(){initNavTree('common_8h_source.html','',''); });
 <div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span> </div>
 <div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span><span class="keyword">static</span> <span class="keyword">inline</span> <span class="keywordtype">void</span> error_exit(<span class="keyword">const</span> <span class="keywordtype">char</span> *msg)</div>
 <div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>{</div>
-<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>    perror(msg);</div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>    fprintf(stderr, <span class="stringliteral">&quot;%s\n&quot;</span>, msg);</div>
 <div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>    exit(EXIT_FAILURE);</div>
 <div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>}</div>
 <div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span> </div>
@@ -134,7 +134,7 @@ $(function(){initNavTree('common_8h_source.html','',''); });
 <div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>        error_exit(msg);</div>
 <div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>}</div>
 <div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span> </div>
-<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span><span class="keyword">static</span> <span class="keywordtype">void</span> printBuddha()</div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span><span class="keyword">static</span> <span class="keyword">inline</span> <span class="keywordtype">void</span> printBuddha()</div>
 <div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>{</div>
 <div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>    printf(<span class="stringliteral">&quot;                 _ooOoo_\n&quot;</span></div>
 <div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>           <span class="stringliteral">&quot;                  o8888888o\n&quot;</span></div>

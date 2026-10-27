@@ -92,32 +92,222 @@ $(function(){initNavTree('generator_8c.html','',''); });
   <div class="headertitle"><div class="title">generator.c File Reference</div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>This is the generator program. The code is formatted in knfmt to follow the rules of knf(<a href="https://man.openbsd.org/style">https://man.openbsd.org/style</a>).  
+<a href="#details">More...</a></p>
 <div class="textblock"><code>#include &quot;../include/__semaphore_interface.h&quot;</code><br />
-<code>#include &lt;stdio.h&gt;</code><br />
 </div><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-func-members" class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:ad96d407a911fbb914fa8e4cfbf2faf0f" id="r_ad96d407a911fbb914fa8e4cfbf2faf0f"><td class="memItemLeft"><a id="ad96d407a911fbb914fa8e4cfbf2faf0f" name="ad96d407a911fbb914fa8e4cfbf2faf0f"></a>
 static void&#160;</td><td class="memItemRight"><b>usage</b> (void)</td></tr>
-<tr class="memitem:a0b0aa737a896a42b3433d4e7e4bf9ea2" id="r_a0b0aa737a896a42b3433d4e7e4bf9ea2"><td class="memItemLeft"><a id="a0b0aa737a896a42b3433d4e7e4bf9ea2" name="a0b0aa737a896a42b3433d4e7e4bf9ea2"></a>
-static struct <a class="el" href="structEdgeList.html">EdgeList</a>&#160;</td><td class="memItemRight"><b>parseInput</b> (int argc, char **argv)</td></tr>
-<tr class="memitem:a1c671de3ea86e2317d188894e4c0b4c2" id="r_a1c671de3ea86e2317d188894e4c0b4c2"><td class="memItemLeft"><a id="a1c671de3ea86e2317d188894e4c0b4c2" name="a1c671de3ea86e2317d188894e4c0b4c2"></a>
-static void&#160;</td><td class="memItemRight"><b>shuffleVertexes</b> (struct <a class="el" href="structNode.html">Node</a> NodeList[], size_t length)</td></tr>
-<tr class="memitem:a63d19c10959f7d1bc77a217d23afea32" id="r_a63d19c10959f7d1bc77a217d23afea32"><td class="memItemLeft"><a id="a63d19c10959f7d1bc77a217d23afea32" name="a63d19c10959f7d1bc77a217d23afea32"></a>
-static size_t&#160;</td><td class="memItemRight"><b>position</b> (struct <a class="el" href="structNode.html">Node</a> *NodeList, uint valueNode, size_t length)</td></tr>
+<tr class="memitem:a0b0aa737a896a42b3433d4e7e4bf9ea2" id="r_a0b0aa737a896a42b3433d4e7e4bf9ea2"><td class="memItemLeft">static struct <a class="el" href="structEdgeList.html">EdgeList</a>&#160;</td><td class="memItemRight"><a class="el" href="#a0b0aa737a896a42b3433d4e7e4bf9ea2">parseInput</a> (int argc, char **argv)</td></tr>
+<tr class="memitem:a1c671de3ea86e2317d188894e4c0b4c2" id="r_a1c671de3ea86e2317d188894e4c0b4c2"><td class="memItemLeft">static void&#160;</td><td class="memItemRight"><a class="el" href="#a1c671de3ea86e2317d188894e4c0b4c2">shuffleVertexes</a> (struct <a class="el" href="structNode.html">Node</a> NodeList[], size_t length)</td></tr>
+<tr class="memitem:a63d19c10959f7d1bc77a217d23afea32" id="r_a63d19c10959f7d1bc77a217d23afea32"><td class="memItemLeft">static size_t&#160;</td><td class="memItemRight"><a class="el" href="#a63d19c10959f7d1bc77a217d23afea32">position</a> (struct <a class="el" href="structNode.html">Node</a> *NodeList, uint valueNode, size_t length)</td></tr>
 <tr class="memitem:a5473ec5924a4e18130a3ac87f64645a6" id="r_a5473ec5924a4e18130a3ac87f64645a6"><td class="memItemLeft"><a id="a5473ec5924a4e18130a3ac87f64645a6" name="a5473ec5924a4e18130a3ac87f64645a6"></a>
 static struct <a class="el" href="structEdgeList.html">EdgeList</a> const&#160;</td><td class="memItemRight"><b>generateSolution</b> (const struct <a class="el" href="structEdgeList.html">EdgeList</a> *restrict graph)</td></tr>
-<tr class="memitem:a95ef1fb186db9ea94c31d0f74ab452dd" id="r_a95ef1fb186db9ea94c31d0f74ab452dd"><td class="memItemLeft"><a id="a95ef1fb186db9ea94c31d0f74ab452dd" name="a95ef1fb186db9ea94c31d0f74ab452dd"></a>
-void&#160;</td><td class="memItemRight"><b>writeSolution</b> (const struct <a class="el" href="structEdgeList.html">EdgeList</a> graph, struct <a class="el" href="structshm.html">shm</a> *sharedMemory, sem_t *free, sem_t *used, sem_t *write)</td></tr>
-<tr class="memitem:a3c04138a5bfe5d72780bb7e82a18e627" id="r_a3c04138a5bfe5d72780bb7e82a18e627"><td class="memItemLeft"><a id="a3c04138a5bfe5d72780bb7e82a18e627" name="a3c04138a5bfe5d72780bb7e82a18e627"></a>
-int&#160;</td><td class="memItemRight"><b>main</b> (int argc, char **argv)</td></tr>
+<tr class="memitem:a95ef1fb186db9ea94c31d0f74ab452dd" id="r_a95ef1fb186db9ea94c31d0f74ab452dd"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a95ef1fb186db9ea94c31d0f74ab452dd">writeSolution</a> (const struct <a class="el" href="structEdgeList.html">EdgeList</a> graph, struct <a class="el" href="structshm.html">shm</a> *sharedMemory, sem_t *free, sem_t *used, sem_t *write)</td></tr>
+<tr class="memitem:a3c04138a5bfe5d72780bb7e82a18e627" id="r_a3c04138a5bfe5d72780bb7e82a18e627"><td class="memItemLeft">int&#160;</td><td class="memItemRight"><a class="el" href="#a3c04138a5bfe5d72780bb7e82a18e627">main</a> (int argc, char **argv)</td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
-<div class="textblock"><dl class="section author"><dt>Author</dt><dd>Cihat Simsek (<a href="#" onclick="location.href='mai'+'lto:'+'e12'+'51'+'964'+'7@'+'stu'+'de'+'nt.'+'tu'+'wie'+'n.'+'ac.'+'at'; return false;">e1251<span class="obfuscator">.nosp@m.</span>9647<span class="obfuscator">.nosp@m.</span>@stud<span class="obfuscator">.nosp@m.</span>ent.<span class="obfuscator">.nosp@m.</span>tuwie<span class="obfuscator">.nosp@m.</span>n.ac<span class="obfuscator">.nosp@m.</span>.at</a>) </dd></dl>
+<div class="textblock"><p>This is the generator program. The code is formatted in knfmt to follow the rules of knf(<a href="https://man.openbsd.org/style">https://man.openbsd.org/style</a>). </p>
+<dl class="section author"><dt>Author</dt><dd>Cihat Simsek (<a href="#" onclick="location.href='mai'+'lto:'+'e12'+'51'+'964'+'7@'+'stu'+'de'+'nt.'+'tu'+'wie'+'n.'+'ac.'+'at'; return false;">e1251<span class="obfuscator">.nosp@m.</span>9647<span class="obfuscator">.nosp@m.</span>@stud<span class="obfuscator">.nosp@m.</span>ent.<span class="obfuscator">.nosp@m.</span>tuwie<span class="obfuscator">.nosp@m.</span>n.ac<span class="obfuscator">.nosp@m.</span>.at</a>) </dd></dl>
 <dl class="section version"><dt>Version</dt><dd>0.1 </dd></dl>
 <dl class="section date"><dt>Date</dt><dd>2026-10-20</dd></dl>
 <dl class="section copyright"><dt>Copyright</dt><dd>Copyright (c) 2026 </dd></dl>
-</div></div><!-- contents -->
+</div><a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Function Documentation</h2>
+<a id="a3c04138a5bfe5d72780bb7e82a18e627" name="a3c04138a5bfe5d72780bb7e82a18e627"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3c04138a5bfe5d72780bb7e82a18e627">&#9670;&#160;</a></span>main()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int main </td>
+          <td>(</td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>argc</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">char **</td>          <td class="paramname"><span class="paramname"><em>argv</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">argc</td><td></td></tr>
+    <tr><td class="paramname">argv</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>int </dd></dl>
+
+</div>
+</div>
+<a id="a0b0aa737a896a42b3433d4e7e4bf9ea2" name="a0b0aa737a896a42b3433d4e7e4bf9ea2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0b0aa737a896a42b3433d4e7e4bf9ea2">&#9670;&#160;</a></span>parseInput()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">struct <a class="el" href="structEdgeList.html">EdgeList</a> parseInput </td>
+          <td>(</td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>argc</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">char **</td>          <td class="paramname"><span class="paramname"><em>argv</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">argc</td><td></td></tr>
+    <tr><td class="paramname">argv</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>struct <a class="el" href="structEdgeList.html">EdgeList</a> </dd></dl>
+
+</div>
+</div>
+<a id="a63d19c10959f7d1bc77a217d23afea32" name="a63d19c10959f7d1bc77a217d23afea32"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a63d19c10959f7d1bc77a217d23afea32">&#9670;&#160;</a></span>position()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">size_t position </td>
+          <td>(</td>
+          <td class="paramtype">struct <a class="el" href="structNode.html">Node</a> *</td>          <td class="paramname"><span class="paramname"><em>NodeList</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint</td>          <td class="paramname"><span class="paramname"><em>valueNode</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t</td>          <td class="paramname"><span class="paramname"><em>length</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">NodeList</td><td></td></tr>
+    <tr><td class="paramname">valueNode</td><td></td></tr>
+    <tr><td class="paramname">length</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>size_t </dd></dl>
+
+</div>
+</div>
+<a id="a1c671de3ea86e2317d188894e4c0b4c2" name="a1c671de3ea86e2317d188894e4c0b4c2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1c671de3ea86e2317d188894e4c0b4c2">&#9670;&#160;</a></span>shuffleVertexes()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void shuffleVertexes </td>
+          <td>(</td>
+          <td class="paramtype">struct <a class="el" href="structNode.html">Node</a></td>          <td class="paramname"><span class="paramname"><em>NodeList</em></span>[], </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t</td>          <td class="paramname"><span class="paramname"><em>length</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">NodeList</td><td></td></tr>
+    <tr><td class="paramname">length</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a95ef1fb186db9ea94c31d0f74ab452dd" name="a95ef1fb186db9ea94c31d0f74ab452dd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a95ef1fb186db9ea94c31d0f74ab452dd">&#9670;&#160;</a></span>writeSolution()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void writeSolution </td>
+          <td>(</td>
+          <td class="paramtype">const struct <a class="el" href="structEdgeList.html">EdgeList</a></td>          <td class="paramname"><span class="paramname"><em>graph</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">struct <a class="el" href="structshm.html">shm</a> *</td>          <td class="paramname"><span class="paramname"><em>sharedMemory</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">sem_t *</td>          <td class="paramname"><span class="paramname"><em>free</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">sem_t *</td>          <td class="paramname"><span class="paramname"><em>used</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">sem_t *</td>          <td class="paramname"><span class="paramname"><em>write</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">graph</td><td></td></tr>
+    <tr><td class="paramname">sharedMemory</td><td></td></tr>
+    <tr><td class="paramname">free</td><td></td></tr>
+    <tr><td class="paramname">used</td><td></td></tr>
+    <tr><td class="paramname">write</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+</div><!-- contents -->
 </div><!-- doc-content -->
 <div id="page-nav" class="page-nav-panel">
 <div id="page-nav-resize-handle"></div>

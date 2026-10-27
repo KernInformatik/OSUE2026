@@ -93,30 +93,174 @@ $(function(){initNavTree('supervisor_8c.html','',''); });
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><code>#include &quot;../include/__semaphore_interface.h&quot;</code><br />
-<code>#include &lt;stdio.h&gt;</code><br />
 </div><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-func-members" class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:ad96d407a911fbb914fa8e4cfbf2faf0f" id="r_ad96d407a911fbb914fa8e4cfbf2faf0f"><td class="memItemLeft"><a id="ad96d407a911fbb914fa8e4cfbf2faf0f" name="ad96d407a911fbb914fa8e4cfbf2faf0f"></a>
-static void&#160;</td><td class="memItemRight"><b>usage</b> (void)</td></tr>
-<tr class="memitem:aa5bce3630877514ccb183f07aa2c0d15" id="r_aa5bce3630877514ccb183f07aa2c0d15"><td class="memItemLeft"><a id="aa5bce3630877514ccb183f07aa2c0d15" name="aa5bce3630877514ccb183f07aa2c0d15"></a>
-static void&#160;</td><td class="memItemRight"><b>delay</b> (uint seconds)</td></tr>
-<tr class="memitem:a69b130a65087019e51247eff915322c2" id="r_a69b130a65087019e51247eff915322c2"><td class="memItemLeft"><a id="a69b130a65087019e51247eff915322c2" name="a69b130a65087019e51247eff915322c2"></a>
-static int&#160;</td><td class="memItemRight"><b>readSolution</b> (struct <a class="el" href="structshm.html">shm</a> *buffer, FILE *Output)</td></tr>
-<tr class="memitem:a3c04138a5bfe5d72780bb7e82a18e627" id="r_a3c04138a5bfe5d72780bb7e82a18e627"><td class="memItemLeft"><a id="a3c04138a5bfe5d72780bb7e82a18e627" name="a3c04138a5bfe5d72780bb7e82a18e627"></a>
-int&#160;</td><td class="memItemRight"><b>main</b> (int argc, char **argv)</td></tr>
+<tr class="memitem:a8d619b8c91dafc74a43e4744e2573ea5" id="r_a8d619b8c91dafc74a43e4744e2573ea5"><td class="memItemLeft"><a id="a8d619b8c91dafc74a43e4744e2573ea5" name="a8d619b8c91dafc74a43e4744e2573ea5"></a>
+static void&#160;</td><td class="memItemRight"><b>usage</b> (FILE *Output)</td></tr>
+<tr class="memdesc:a8d619b8c91dafc74a43e4744e2573ea5"><td class="mdescLeft">&#160;</td><td class="mdescRight">is the usage function, to print the synopsis of supervisor <br /></td></tr>
+<tr class="memitem:aa5bce3630877514ccb183f07aa2c0d15" id="r_aa5bce3630877514ccb183f07aa2c0d15"><td class="memItemLeft">static void&#160;</td><td class="memItemRight"><a class="el" href="#aa5bce3630877514ccb183f07aa2c0d15">delay</a> (uint seconds)</td></tr>
+<tr class="memdesc:aa5bce3630877514ccb183f07aa2c0d15"><td class="mdescLeft">&#160;</td><td class="mdescRight">delays time, given from the input  <br /></td></tr>
+<tr class="memitem:a69b130a65087019e51247eff915322c2" id="r_a69b130a65087019e51247eff915322c2"><td class="memItemLeft">static int&#160;</td><td class="memItemRight"><a class="el" href="#a69b130a65087019e51247eff915322c2">readSolution</a> (struct <a class="el" href="structshm.html">shm</a> *buffer, FILE *Output)</td></tr>
+<tr class="memdesc:a69b130a65087019e51247eff915322c2"><td class="mdescLeft">&#160;</td><td class="mdescRight">reads a possible solution from the shm (circular buffer)  <br /></td></tr>
+<tr class="memitem:ab125364cb891b4902456653ddd1c6cae" id="r_ab125364cb891b4902456653ddd1c6cae"><td class="memItemLeft">static uint&#160;</td><td class="memItemRight"><a class="el" href="#ab125364cb891b4902456653ddd1c6cae">parseInput</a> (const char *s)</td></tr>
+<tr class="memdesc:ab125364cb891b4902456653ddd1c6cae"><td class="mdescLeft">&#160;</td><td class="mdescRight">parses the given input, checks it and returns it as an unsigned integer  <br /></td></tr>
+<tr class="memitem:a3c04138a5bfe5d72780bb7e82a18e627" id="r_a3c04138a5bfe5d72780bb7e82a18e627"><td class="memItemLeft">int&#160;</td><td class="memItemRight"><a class="el" href="#a3c04138a5bfe5d72780bb7e82a18e627">main</a> (int argc, char **argv)</td></tr>
+<tr class="memdesc:a3c04138a5bfe5d72780bb7e82a18e627"><td class="mdescLeft">&#160;</td><td class="mdescRight">main function  <br /></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-var-members" class="groupheader"><a id="var-members" name="var-members"></a>
 Variables</h2></td></tr>
 <tr class="memitem:a0b6d3439424a03ac9ad9ea40abb12021" id="r_a0b6d3439424a03ac9ad9ea40abb12021"><td class="memItemLeft"><a id="a0b6d3439424a03ac9ad9ea40abb12021" name="a0b6d3439424a03ac9ad9ea40abb12021"></a>
 volatile sig_atomic_t&#160;</td><td class="memItemRight"><b>quit</b></td></tr>
+<tr class="memitem:abf16d598ca8fb0d53c77c59878b48a7c" id="r_abf16d598ca8fb0d53c77c59878b48a7c"><td class="memItemLeft"><a id="abf16d598ca8fb0d53c77c59878b48a7c" name="abf16d598ca8fb0d53c77c59878b48a7c"></a>
+static long&#160;</td><td class="memItemRight"><b>currenBest</b> = SSIZE_MAX</td></tr>
+<tr class="memdesc:abf16d598ca8fb0d53c77c59878b48a7c"><td class="mdescLeft">&#160;</td><td class="mdescRight">is the current solution, needed to check the validity of a solution <br /></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock"><dl class="section author"><dt>Author</dt><dd>Cihat Simsek (<a href="#" onclick="location.href='mai'+'lto:'+'e12'+'51'+'964'+'7@'+'stu'+'de'+'nt.'+'tu'+'wie'+'n.'+'ac.'+'at'; return false;">e1251<span class="obfuscator">.nosp@m.</span>9647<span class="obfuscator">.nosp@m.</span>@stud<span class="obfuscator">.nosp@m.</span>ent.<span class="obfuscator">.nosp@m.</span>tuwie<span class="obfuscator">.nosp@m.</span>n.ac<span class="obfuscator">.nosp@m.</span>.at</a>) </dd></dl>
 <dl class="section version"><dt>Version</dt><dd>0.1 </dd></dl>
 <dl class="section date"><dt>Date</dt><dd>2026-10-25</dd></dl>
 <dl class="section copyright"><dt>Copyright</dt><dd>Copyright (c) 2026 </dd></dl>
-</div></div><!-- contents -->
+</div><a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Function Documentation</h2>
+<a id="aa5bce3630877514ccb183f07aa2c0d15" name="aa5bce3630877514ccb183f07aa2c0d15"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa5bce3630877514ccb183f07aa2c0d15">&#9670;&#160;</a></span>delay()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void delay </td>
+          <td>(</td>
+          <td class="paramtype">uint</td>          <td class="paramname"><span class="paramname"><em>seconds</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>delays time, given from the input </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">seconds</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a3c04138a5bfe5d72780bb7e82a18e627" name="a3c04138a5bfe5d72780bb7e82a18e627"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3c04138a5bfe5d72780bb7e82a18e627">&#9670;&#160;</a></span>main()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int main </td>
+          <td>(</td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>argc</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">char **</td>          <td class="paramname"><span class="paramname"><em>argv</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>main function </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">argc</td><td>the argument counter </td></tr>
+    <tr><td class="paramname">argv</td><td>argument vector </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>int 0 on success </dd></dl>
+<p>The beginning of pure menace</p>
+
+</div>
+</div>
+<a id="ab125364cb891b4902456653ddd1c6cae" name="ab125364cb891b4902456653ddd1c6cae"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab125364cb891b4902456653ddd1c6cae">&#9670;&#160;</a></span>parseInput()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint parseInput </td>
+          <td>(</td>
+          <td class="paramtype">const char *</td>          <td class="paramname"><span class="paramname"><em>s</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>parses the given input, checks it and returns it as an unsigned integer </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">s</td><td>optionally the optarg string </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>uint </dd></dl>
+
+</div>
+</div>
+<a id="a69b130a65087019e51247eff915322c2" name="a69b130a65087019e51247eff915322c2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a69b130a65087019e51247eff915322c2">&#9670;&#160;</a></span>readSolution()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int readSolution </td>
+          <td>(</td>
+          <td class="paramtype">struct <a class="el" href="structshm.html">shm</a> *</td>          <td class="paramname"><span class="paramname"><em>buffer</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">FILE *</td>          <td class="paramname"><span class="paramname"><em>Output</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>reads a possible solution from the shm (circular buffer) </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">buffer</td><td>the shm object, needs to be created see assertion </td></tr>
+    <tr><td class="paramname">Output</td><td>specifies the output file </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>int 1 for a cyclic graph 0 for an acyclic graph </dd></dl>
+
+</div>
+</div>
+</div><!-- contents -->
 </div><!-- doc-content -->
 <div id="page-nav" class="page-nav-panel">
 <div id="page-nav-resize-handle"></div>

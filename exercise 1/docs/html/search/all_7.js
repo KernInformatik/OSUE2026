@@ -1,8 +1,5 @@
 var searchData=
 [
-  ['semaphore_2ec_0',['semaphore.c',['../semaphore_8c.html',1,'']]],
-  ['sharedmemory_5fclient_1',['sharedMemory_Client',['../semaphore_8c.html#a992b2bfd14528cf4d200ea41bc83f333',1,'semaphore.c']]],
-  ['sharedmemory_5fserver_2',['sharedMemory_Server',['../semaphore_8c.html#ad95a18e1f928efae65d7056b8af08f2d',1,'semaphore.c']]],
-  ['shm_3',['shm',['../structshm.html',1,'']]],
-  ['supervisor_2ec_4',['supervisor.c',['../supervisor_8c.html',1,'']]]
+  ['node_0',['Node',['../structNode.html',1,'']]],
+  ['notes_1',['Notes',['../md_assets_2Notes.html',1,'']]]
 ];

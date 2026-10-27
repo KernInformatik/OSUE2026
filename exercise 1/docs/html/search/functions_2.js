@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['sharedmemory_5fclient_0',['sharedMemory_Client',['../semaphore_8c.html#a992b2bfd14528cf4d200ea41bc83f333',1,'semaphore.c']]],
-  ['sharedmemory_5fserver_1',['sharedMemory_Server',['../semaphore_8c.html#ad95a18e1f928efae65d7056b8af08f2d',1,'semaphore.c']]]
+  ['initializesemaphore_5fclient_0',['initializeSemaphore_Client',['../semaphore_8c.html#a5aca5daac24cb345fb7b138b19bb5603',1,'semaphore.c']]],
+  ['initializesemaphore_5fserver_1',['initializeSemaphore_Server',['../semaphore_8c.html#a26b3c6b45e505e5cc8a9df67b93d8bef',1,'semaphore.c']]]
 ];

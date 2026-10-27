@@ -204,7 +204,7 @@ static inline struct EdgeList const generateSolution(const struct EdgeList *rest
 
     rv.length = counter;
 
-    printf("rv length = %zd\n", rv.length);
+    // printf("rv length = %zd\n", rv.length);
 
     return rv;
 }
