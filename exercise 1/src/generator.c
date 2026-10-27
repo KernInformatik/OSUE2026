@@ -1,7 +1,8 @@
 /**
  * @file generator.c
  * @author Cihat Simsek (e12519647@student.tuwien.ac.at)
- * @brief
+ * @brief This is the generator program. The code is formatted in knfmt to follow the rules of
+ * knf(https://man.openbsd.org/style)
  * @version 0.1
  * @date 2026-10-20
  *
@@ -9,8 +10,11 @@
  *
  */
 #include "../include/__semaphore_interface.h"
-#include <stdio.h>
 
+/**
+ * @brief
+ *
+ */
 static inline void usage(void)
 {
     printf("Usage: ./generator Edges...");
@@ -19,6 +23,13 @@ static inline void usage(void)
     return;
 }
 
+/**
+ * @brief
+ *
+ * @param argc
+ * @param argv
+ * @return struct EdgeList
+ */
 static inline struct EdgeList parseInput(int argc, char **argv)
 {
     struct EdgeList rv = {0};
@@ -118,6 +129,12 @@ static inline struct EdgeList parseInput(int argc, char **argv)
     return rv;
 }
 
+/**
+ * @brief
+ *
+ * @param NodeList
+ * @param length
+ */
 static inline void shuffleVertexes(struct Node NodeList[], size_t length)
 {
     if (length > 1)
@@ -132,6 +149,14 @@ static inline void shuffleVertexes(struct Node NodeList[], size_t length)
     }
 }
 
+/**
+ * @brief
+ *
+ * @param NodeList
+ * @param valueNode
+ * @param length
+ * @return size_t
+ */
 static size_t position(struct Node *NodeList, uint valueNode, size_t length)
 {
     size_t position = 0;
@@ -184,27 +209,50 @@ static inline struct EdgeList const generateSolution(const struct EdgeList *rest
     return rv;
 }
 
+/**
+ * @brief
+ *
+ * @param graph
+ * @param sharedMemory
+ * @param free
+ * @param used
+ * @param write
+ */
 void writeSolution(const struct EdgeList graph, struct shm *sharedMemory, sem_t *free, sem_t *used, sem_t *write)
 {
     if (sharedMemory->status == 1)
     {
 
         if (sem_wait(free) == -1)
+        {
             error_exit("sem_wait (free)");
+        }
         if (sem_wait(write) == -1)
+        {
             error_exit("sem_wait (write)");
+        }
         sharedMemory->data[sharedMemory->writehead] = graph;
         sharedMemory->writehead = (sharedMemory->writehead + 1) % MAX_BUFF_SIZE;
 
         if (sem_post(write) == -1)
+        {
             error_exit("sem_post (write)");
+        }
         if (sem_post(used) == -1)
+        {
             error_exit("sem_post (used)");
-
+        }
         fprintf(stdout, "Wrote %zu Edges at slot %zu\n", graph.length, sharedMemory->writehead);
     }
 }
 
+/**
+ * @brief
+ *
+ * @param argc
+ * @param argv
+ * @return int
+ */
 int main(int argc, char **argv)
 {
     int shmfd;

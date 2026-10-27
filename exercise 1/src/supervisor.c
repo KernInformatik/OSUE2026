@@ -9,15 +9,24 @@
  *
  */
 #include "../include/__semaphore_interface.h"
-#include <bits/getopt_core.h>
 
 extern volatile sig_atomic_t quit;
+
+/**
+ * @brief
+ *
+ */
 static inline void usage(void)
 {
     printf("Usage: ./supervisor [-h] [-o outputfile] [-n limit] [-w delay]");
     return;
 }
 
+/**
+ * @brief
+ *
+ * @param seconds
+ */
 static void delay(uint seconds)
 {
     clock_t start_time = clock();
@@ -25,6 +34,15 @@ static void delay(uint seconds)
         ;
 }
 
+/**
+ * @brief
+ *
+ * @param buffer
+ * @param Output
+ * @param delay
+ * @param verbose
+ * @return int
+ */
 static int readSolution(struct shm *buffer, FILE *Output, bool delay, bool verbose)
 {
     struct EdgeList solution = buffer->data[buffer->readhead];
@@ -55,6 +73,13 @@ static int readSolution(struct shm *buffer, FILE *Output, bool delay, bool verbo
     return 0;
 }
 
+/**
+ * @brief
+ *
+ * @param argc
+ * @param argv
+ * @return int
+ */
 int main(int argc, char **argv)
 {
     int shmfd;
@@ -90,7 +115,7 @@ int main(int argc, char **argv)
             break;
         case 'w':
             setDelay = true;
-            seconds = strtof(optarg, NULL);
+            seconds = (int)strtof(optarg, NULL);
             break;
         case '?':
             usage();
