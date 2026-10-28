@@ -4,6 +4,7 @@
 #
 # Usage:   ./test.sh            all tests except the challenging graph
 #          ./test.sh --long     also run the challenging graph (can take a while)
+#          BEEP=0 ./test.sh     disable the buzzer at the end of the run
 #
 # Run it from the project root (the directory that contains build/).
 
@@ -42,6 +43,21 @@ cleanup()
     rm -rf "$TMP"
 }
 trap cleanup EXIT
+
+# PC speaker buzzer. Uses beep(1) (needs the pcspkr kernel module and write access
+# to the speaker device); falls back to the terminal bell if beep is missing or fails.
+buzz() # count
+{
+    [ "${BEEP:-1}" = "0" ] && return 0
+    local n=${1:-1} i
+    if command -v beep >/dev/null 2>&1; then
+        beep -f 120 -l 350 -d 150 -r "$n" 2>/dev/null && return 0
+    fi
+    for ((i = 0; i < n; i++)); do
+        { printf '\a' > /dev/tty; } 2>/dev/null || printf '\a'
+        sleep 0.5
+    done
+}
 
 check_rc()       # name expected actual
 {
@@ -310,4 +326,12 @@ fi
 # ---------------------------------------------------------------- summary
 section "Summary"
 printf '  passed: %d   failed: %d\n' "$PASS" "$FAIL"
-[ "$FAIL" -eq 0 ]
+
+# buzzer: one buzz if everything passed, three if something failed
+if [ "$FAIL" -eq 0 ]; then
+    buzz 1
+    exit 0
+else
+    buzz 3
+    exit 1
+fi
