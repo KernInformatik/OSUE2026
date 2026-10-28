@@ -12,7 +12,8 @@
 #include "../include/__semaphore_interface.h"
 
 /**
- * @brief
+ * @brief prints a usage prompt, can be called if an error occurs, unlike the supervisor, the generator doesn't have an
+ * explicit CLI handling
  *
  */
 static inline void usage(void)
@@ -24,7 +25,7 @@ static inline void usage(void)
 }
 
 /**
- * @brief
+ * @brief stores the edges into an EdgeList, for the structure of the graph see include/graph.h
  *
  * @param argc
  * @param argv
@@ -130,7 +131,7 @@ static inline struct EdgeList parseInput(int argc, char **argv)
 }
 
 /**
- * @brief
+ * @brief needed for the algorithm, see assets/algorithm.md
  *
  * @param NodeList
  * @param length
@@ -150,11 +151,11 @@ static inline void shuffleVertexes(struct Node NodeList[], size_t length)
 }
 
 /**
- * @brief
+ * @brief needed for the algorithm, see assets/algorithm.md
  *
- * @param NodeList
- * @param valueNode
- * @param length
+ * @param NodeList the given nodes of a graph, optionally shuffeld
+ * @param valueNode the number assigned to a node, preferrably the one given EdgeList
+ * @param length every EdgeList has also a length, put it here to determine the position of specific node
  * @return size_t
  */
 static size_t position(struct Node *NodeList, uint valueNode, size_t length)
@@ -169,6 +170,12 @@ static size_t position(struct Node *NodeList, uint valueNode, size_t length)
     return (position == length ? -1 : position);
 }
 
+/**
+ * @brief Guesses a possible solution, using a monte carlo approach, for more see assets/algorithm.md
+ *
+ * @param graph
+ * @return struct EdgeList const
+ */
 static inline struct EdgeList const generateSolution(const struct EdgeList *restrict graph)
 {
     struct EdgeList rv = {0};
@@ -182,6 +189,7 @@ static inline struct EdgeList const generateSolution(const struct EdgeList *rest
 
         for (size_t j = 0; j < 2; ++j)
         {
+            /* Writes the nodes only once into the NodeList make it more uniqe */
             if (position(NodeList, edge[j].node_number, counter) == -1)
             {
                 NodeList[pos++] = edge[j];
@@ -210,13 +218,13 @@ static inline struct EdgeList const generateSolution(const struct EdgeList *rest
 }
 
 /**
- * @brief
+ * @brief writes the solution into the shared memory in /dev/shm. IPC guaranteed by the semaphores free, used and write
  *
- * @param graph
- * @param sharedMemory
- * @param free
- * @param used
- * @param write
+ * @param graph the graph, which is hopefully a possible solution
+ * @param sharedMemory the shared memory in /dev/shm
+ * @param free IPC - free semaphore
+ * @param used IPC - used semaphore
+ * @param write IPC - write semaphore
  */
 void writeSolution(const struct EdgeList graph, struct shm *sharedMemory, sem_t *free, sem_t *used, sem_t *write)
 {
@@ -247,11 +255,13 @@ void writeSolution(const struct EdgeList graph, struct shm *sharedMemory, sem_t 
 }
 
 /**
- * @brief
+ * @brief main, opens the shared memory and the semaphores. Parses a graph from the input, writes a possible
+ * solution,generated from input, into the sahred memory.
  *
- * @param argc
- * @param argv
- * @return int
+ * @param argc argument counter
+ * @param argv argument vector(s)
+ * @return int 0 on success else -1, see error cases on shared memory and semaphores on
+ * include/__semaphore_interface.h
  */
 int main(int argc, char **argv)
 {

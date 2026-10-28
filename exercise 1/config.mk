@@ -9,7 +9,7 @@ COMMON_FLAGS := -std=c99 -pedantic -Wall -O2 \
 	-D_POSIX_C_SOURCE=200809L -g
 
 ASAN := -fsanitize=address -fsanitize=undefined -fno-omit-frame-pointer -fno-common
-CFLAGS := $(COMMON_FLAGS) $(ASAN)
+CFLAGS := $(COMMON_FLAGS)
 
 # directories
 SRC_DIR := src

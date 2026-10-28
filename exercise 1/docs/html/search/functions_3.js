@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['main_0',['main',['../generator_8c.html#a3c04138a5bfe5d72780bb7e82a18e627',1,'main(int argc, char **argv):&#160;generator.c'],['../supervisor_8c.html#a3c04138a5bfe5d72780bb7e82a18e627',1,'main(int argc, char **argv):&#160;supervisor.c']]]
+  ['initializesemaphore_5fclient_0',['initializeSemaphore_Client',['../semaphore_8c.html#a5aca5daac24cb345fb7b138b19bb5603',1,'semaphore.c']]],
+  ['initializesemaphore_5fserver_1',['initializeSemaphore_Server',['../semaphore_8c.html#a26b3c6b45e505e5cc8a9df67b93d8bef',1,'semaphore.c']]]
 ];
