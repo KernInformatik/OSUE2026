@@ -101,66 +101,66 @@ $(function(){initNavTree('____semaphore__interface_8h_source.html','',''); });
 <div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span><span class="preprocessor">#define MAX_BUFF_SIZE 7</span></div>
 <div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span></div>
 <div class="foldopen" id="foldopen00037" data-start="{" data-end="};">
-<div class="line"><a id="l00037" name="l00037"></a><span class="lineno"><a class="line" href="structshm.html">   37</a></span><span class="keyword">struct </span><a class="code hl_struct" href="structshm.html">shm</a></div>
-<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>{</div>
-<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>    <span class="keyword">struct </span><a class="code hl_struct" href="structEdgeList.html">EdgeList</a> data[MAX_BUFF_SIZE];</div>
-<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>    <span class="keywordtype">size_t</span> readhead;</div>
-<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>    <span class="keywordtype">size_t</span> writehead;</div>
-<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>    <span class="keywordtype">int</span> status;</div>
-<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>};</div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno"><a class="line" href="structshm.html">   37</a></span><span class="keyword">struct </span><a class="code hl_struct" href="structshm.html">shm</a> {</div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>    <span class="keyword">struct </span><a class="code hl_struct" href="structEdgeList.html">EdgeList</a> data[MAX_BUFF_SIZE];</div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>    <span class="keywordtype">size_t</span> readhead;</div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>    <span class="keywordtype">size_t</span> writehead;</div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>    <span class="keywordtype">int</span> status;</div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>};</div>
 </div>
-<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span><span class="comment">/*SHARED MEMORY OPTIONS */</span></div>
-<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span><span class="preprocessor">#define SHM_NAME &quot;/e1251947_shm&quot;</span></div>
-<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span><span class="preprocessor">#define SHM_OFLAG_SERVER (O_RDWR | O_CREAT | O_EXCL)</span></div>
-<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span><span class="preprocessor">#define SHM_OFLAG_CLIENT O_RDWR</span></div>
-<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span> </div>
-<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span><span class="comment">/* For Setting the  rwx permissions https://ftp.gnu.org/old-gnu/Manuals/glibc-2.2.3/html_node/libc_278.html */</span></div>
-<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span><span class="preprocessor">#define SHM_MODE S_IRWXU</span></div>
-<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span><span class="preprocessor">#define MMP_PROT_FLAGS (PROT_READ | PROT_WRITE)</span></div>
-<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span><span class="preprocessor">#define MMP_FLAGS MAP_SHARED</span></div>
-<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span><span class="preprocessor">#define MMP_OFFSET 0</span></div>
-<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span><span class="comment">/*END SHARED MEMORY OPTIONS*/</span></div>
-<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span> </div>
-<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span><span class="comment">/*SEMAPHORE OPTIONS */</span></div>
-<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span><span class="preprocessor">#define FREE_SPACE_SEMAPHORE &quot;/e1251947_sem_free&quot;</span></div>
-<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span><span class="preprocessor">#define FREE_SPACE_SEMAPHORE_SIZE MAX_BUFF_SIZE</span></div>
-<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span> </div>
-<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span><span class="preprocessor">#define USED_SPACE_SEMAPHORE &quot;/e1251947_sem_used&quot;</span></div>
-<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span><span class="preprocessor">#define USED_SPACE_SEMAPHORE_SIZE 0</span></div>
-<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span> </div>
-<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span><span class="preprocessor">#define WRITE_SPACE_SEMAPHORE &quot;/e1251947_sem_write&quot; </span><span class="comment">// mutex</span></div>
-<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span><span class="preprocessor">#define WRITE_SPACE_SEMAPHORE_SIZE 1</span></div>
-<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span> </div>
-<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span><span class="preprocessor">#define OPEN_SEM_MODE S_IRWXU</span></div>
-<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span><span class="preprocessor">#define OPEN_SEM_MODE_SERVER (O_RDWR | O_CREAT | O_EXCL)</span></div>
-<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span><span class="preprocessor">#define OPEN_SEM_MODE_CLIENT O_RDWR</span></div>
-<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span><span class="comment">/*END SEMAPHORE OPTIONS */</span></div>
-<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span> </div>
-<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span><span class="comment">/*SEMAPHORE ERROR*/</span></div>
-<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span><span class="preprocessor">#define OPENING_SHM_ERROR_SERVER &quot;Creating shared memory failed&quot;</span></div>
-<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span><span class="preprocessor">#define OPENING_SHM_ERROR_CLIENT &quot;Opening shared memory failed. Ensure a supervisor is running&quot;</span></div>
-<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span> </div>
-<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span><span class="preprocessor">#define TRUNCATING_SHM_ERROR &quot;Initializing shared memory failed&quot;</span></div>
-<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span><span class="preprocessor">#define MAPPING_SHM_ERROR &quot;Mapping shared memory failed&quot;</span></div>
-<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span><span class="preprocessor">#define CLOSING_SHM_ERROR &quot;Closing shared memory file failed&quot;</span></div>
-<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span><span class="preprocessor">#define UNMAPPING_SHM_ERROR &quot;Unmapping shared memory failed&quot;</span></div>
-<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span><span class="preprocessor">#define UNLINKING_SHM_ERROR &quot;Unlinking shared memory failed&quot;</span></div>
-<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span> </div>
-<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span><span class="preprocessor">#define OPENING_SEM_ERROR &quot;Opening semaphore failed&quot;</span></div>
-<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span><span class="preprocessor">#define CLOSING_SEM_ERROR &quot;Closing semaphore failed&quot;</span></div>
-<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span><span class="preprocessor">#define UNLINKING_SEM_ERROR &quot;Unlinking semaphore failed&quot;</span></div>
-<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span><span class="comment">/*END SEMAPHORE ERROR*/</span></div>
-<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span> </div>
-<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span><span class="comment">/* Semaphore functions*/</span></div>
-<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span><span class="keyword">struct </span><a class="code hl_struct" href="structshm.html">shm</a> *sharedMemory_Server(<span class="keywordtype">int</span> *shmfd);</div>
-<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span></div>
-<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span><span class="keyword">struct </span><a class="code hl_struct" href="structshm.html">shm</a> *sharedMemory_Client(<span class="keywordtype">int</span> *shmfd);</div>
-<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span></div>
-<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span><span class="keywordtype">void</span> cleanSharedMemory_Server(<span class="keyword">struct</span> <a class="code hl_struct" href="structshm.html">shm</a> *<a class="code hl_struct" href="structshm.html">shm</a>, <span class="keywordtype">int</span> shmfd);</div>
-<div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span></div>
-<div class="line"><a id="l00144" name="l00144"></a><span class="lineno">  144</span><span class="keywordtype">void</span> cleanSharedMemory_Client(<span class="keyword">struct</span> <a class="code hl_struct" href="structshm.html">shm</a> *<a class="code hl_struct" href="structshm.html">shm</a>, <span class="keywordtype">int</span> shmfd);</div>
-<div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span></div>
-<div class="line"><a id="l00157" name="l00157"></a><span class="lineno">  157</span>sem_t *initializeSemaphore_Server(<span class="keyword">const</span> <span class="keywordtype">char</span> *sem_name, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> init_value);</div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span><span class="comment">/*SHARED MEMORY OPTIONS */</span></div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span><span class="preprocessor">#define SHM_NAME &quot;/e1251947_shm&quot;</span></div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span><span class="preprocessor">#define SHM_OFLAG_SERVER (O_RDWR | O_CREAT | O_EXCL)</span></div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span><span class="preprocessor">#define SHM_OFLAG_CLIENT O_RDWR</span></div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span> </div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span><span class="comment">/* For Setting the  rwx permissions https://ftp.gnu.org/old-gnu/Manuals/glibc-2.2.3/html_node/libc_278.html */</span></div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span><span class="preprocessor">#define SHM_MODE S_IRWXU</span></div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span><span class="preprocessor">#define MMP_PROT_FLAGS (PROT_READ | PROT_WRITE)</span></div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span><span class="preprocessor">#define MMP_FLAGS MAP_SHARED</span></div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span><span class="preprocessor">#define MMP_OFFSET 0</span></div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span><span class="comment">/*END SHARED MEMORY OPTIONS*/</span></div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span> </div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span><span class="comment">/*SEMAPHORE OPTIONS */</span></div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span><span class="preprocessor">#define FREE_SPACE_SEMAPHORE &quot;/e1251947_sem_free&quot;</span></div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span><span class="preprocessor">#define FREE_SPACE_SEMAPHORE_SIZE MAX_BUFF_SIZE</span></div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span> </div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span><span class="preprocessor">#define USED_SPACE_SEMAPHORE &quot;/e1251947_sem_used&quot;</span></div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span><span class="preprocessor">#define USED_SPACE_SEMAPHORE_SIZE 0</span></div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span> </div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span><span class="preprocessor">#define WRITE_SPACE_SEMAPHORE &quot;/e1251947_sem_write&quot; </span><span class="comment">// mutex</span></div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span><span class="preprocessor">#define WRITE_SPACE_SEMAPHORE_SIZE 1</span></div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span> </div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span><span class="preprocessor">#define OPEN_SEM_MODE S_IRWXU</span></div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span><span class="preprocessor">#define OPEN_SEM_MODE_SERVER (O_RDWR | O_CREAT | O_EXCL)</span></div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span><span class="preprocessor">#define OPEN_SEM_MODE_CLIENT O_RDWR</span></div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span><span class="comment">/*END SEMAPHORE OPTIONS */</span></div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span> </div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span><span class="comment">/*SEMAPHORE ERROR*/</span></div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span><span class="preprocessor">#define OPENING_SHM_ERROR_SERVER &quot;Creating shared memory failed&quot;</span></div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span><span class="preprocessor">#define OPENING_SHM_ERROR_CLIENT &quot;Opening shared memory failed. Ensure a supervisor is running&quot;</span></div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span> </div>
+<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span><span class="preprocessor">#define TRUNCATING_SHM_ERROR &quot;Initializing shared memory failed&quot;</span></div>
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span><span class="preprocessor">#define MAPPING_SHM_ERROR &quot;Mapping shared memory failed&quot;</span></div>
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span><span class="preprocessor">#define CLOSING_SHM_ERROR &quot;Closing shared memory file failed&quot;</span></div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span><span class="preprocessor">#define UNMAPPING_SHM_ERROR &quot;Unmapping shared memory failed&quot;</span></div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span><span class="preprocessor">#define UNLINKING_SHM_ERROR &quot;Unlinking shared memory failed&quot;</span></div>
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span> </div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span><span class="preprocessor">#define OPENING_SEM_ERROR &quot;Opening semaphore failed&quot;</span></div>
+<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span><span class="preprocessor">#define CLOSING_SEM_ERROR &quot;Closing semaphore failed&quot;</span></div>
+<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span><span class="preprocessor">#define UNLINKING_SEM_ERROR &quot;Unlinking semaphore failed&quot;</span></div>
+<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span><span class="comment">/*END SEMAPHORE ERROR*/</span></div>
+<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span> </div>
+<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span><span class="comment">/* Semaphore functions*/</span></div>
+<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span><span class="keyword">struct </span><a class="code hl_struct" href="structshm.html">shm</a> *sharedMemory_Server(<span class="keywordtype">int</span> *shmfd);</div>
+<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span></div>
+<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span><span class="keyword">struct </span><a class="code hl_struct" href="structshm.html">shm</a> *sharedMemory_Client(<span class="keywordtype">int</span> *shmfd);</div>
+<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span></div>
+<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span><span class="keywordtype">void</span> cleanSharedMemory_Server(<span class="keyword">struct</span> <a class="code hl_struct" href="structshm.html">shm</a> *<a class="code hl_struct" href="structshm.html">shm</a>, <span class="keywordtype">int</span> shmfd);</div>
+<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span></div>
+<div class="line"><a id="l00143" name="l00143"></a><span class="lineno">  143</span><span class="keywordtype">void</span> cleanSharedMemory_Client(<span class="keyword">struct</span> <a class="code hl_struct" href="structshm.html">shm</a> *<a class="code hl_struct" href="structshm.html">shm</a>, <span class="keywordtype">int</span> shmfd);</div>
+<div class="line"><a id="l00144" name="l00144"></a><span class="lineno">  144</span></div>
+<div class="line"><a id="l00156" name="l00156"></a><span class="lineno">  156</span>sem_t *initializeSemaphore_Server(<span class="keyword">const</span> <span class="keywordtype">char</span> *sem_name,</div>
+<div class="line"><a id="l00157" name="l00157"></a><span class="lineno">  157</span>    <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> init_value);</div>
 <div class="line"><a id="l00158" name="l00158"></a><span class="lineno">  158</span></div>
 <div class="line"><a id="l00167" name="l00167"></a><span class="lineno">  167</span>sem_t *initializeSemaphore_Client(<span class="keyword">const</span> <span class="keywordtype">char</span> *sem_name);</div>
 <div class="line"><a id="l00168" name="l00168"></a><span class="lineno">  168</span></div>
@@ -173,8 +173,8 @@ $(function(){initNavTree('____semaphore__interface_8h_source.html','',''); });
 <div class="line"><a id="l00190" name="l00190"></a><span class="lineno">  190</span><span class="preprocessor">#endif</span></div>
 <div class="ttc" id="acommon_8h_html"><div class="ttname"><a href="common_8h.html">common.h</a></div><div class="ttdoc">A common header, to cover the majority of the libraries. Includes also macros.</div></div>
 <div class="ttc" id="agraph_8h_html"><div class="ttname"><a href="graph_8h.html">graph.h</a></div></div>
-<div class="ttc" id="astructEdgeList_html"><div class="ttname"><a href="structEdgeList.html">EdgeList</a></div><div class="ttdef"><b>Definition</b> graph.h:28</div></div>
-<div class="ttc" id="astructshm_html"><div class="ttname"><a href="structshm.html">shm</a></div><div class="ttdoc">Layout of the shared memory.</div><div class="ttdef"><b>Definition</b> __semaphore_interface.h:38</div></div>
+<div class="ttc" id="astructEdgeList_html"><div class="ttname"><a href="structEdgeList.html">EdgeList</a></div><div class="ttdef"><b>Definition</b> graph.h:25</div></div>
+<div class="ttc" id="astructshm_html"><div class="ttname"><a href="structshm.html">shm</a></div><div class="ttdoc">Layout of the shared memory.</div><div class="ttdef"><b>Definition</b> __semaphore_interface.h:37</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 </div><!-- container -->
