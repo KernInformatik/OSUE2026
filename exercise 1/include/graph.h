@@ -13,21 +13,18 @@
 #define GRAPH_H
 #include "../include/common.h"
 #include <sys/types.h>
-struct Node
-{
-    u_int8_t node_number : 4;
+struct Node {
+	u_int8_t node_number:4;
 };
 
-struct Edge
-{
-    struct Node u;
-    struct Node v;
+struct Edge {
+	struct Node u;
+	struct Node v;
 };
 
-struct EdgeList
-{
-    struct Edge NumberOfEdges[128];
-    ssize_t length;
+struct EdgeList {
+	struct Edge NumberOfEdges[128];
+	ssize_t length;
 };
 
 #endif

@@ -34,12 +34,11 @@ altered to fit the needs of this project.
  *          alive is set to 1 by the supervisor and to 0 to make all generators
  * terminate.
  */
-struct shm
-{
-    struct EdgeList data[MAX_BUFF_SIZE];
-    size_t readhead;
-    size_t writehead;
-    int status;
+struct shm {
+	struct EdgeList data[MAX_BUFF_SIZE];
+	size_t readhead;
+	size_t writehead;
+	int status;
 };
 /*SHARED MEMORY OPTIONS */
 #define SHM_NAME "/e1251947_shm"
@@ -154,7 +153,8 @@ void cleanSharedMemory_Client(struct shm *shm, int shmfd);
  * @param init_value The initial value of the semaphore.
  * @return sem_t*
  */
-sem_t *initializeSemaphore_Server(const char *sem_name, unsigned int init_value);
+sem_t *initializeSemaphore_Server(const char *sem_name,
+    unsigned int init_value);
 
 /**
  * @brief Opens an existing named semaphore (client side)

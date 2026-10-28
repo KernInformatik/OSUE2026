@@ -16,10 +16,12 @@ extern volatile sig_atomic_t quit;
  * @brief is the usage function, to print the synopsis of supervisor
  *
  */
-static inline void usage(FILE *Output)
+static inline void
+usage(FILE *Output)
 {
-    fprintf(Output, "Usage: ./supervisor [-h] [-o outputfile] [-n limit] [-w delay]\n");
-    return;
+	fprintf(Output,
+	    "Usage: ./supervisor [-h] [-o outputfile] [-n limit] [-w delay]\n");
+	return;
 }
 
 /**
@@ -27,9 +29,10 @@ static inline void usage(FILE *Output)
  *
  * @param seconds
  */
-static void delay(uint seconds)
+static void
+delay(uint seconds)
 {
-    sleep(seconds);
+	sleep(seconds);
 }
 
 /**
@@ -45,41 +48,41 @@ static long currenBest = SSIZE_MAX;
  * @param Output specifies the output file
  * @return int 1 for a cyclic graph 0 for an acyclic graph
  */
-static int readSolution(struct shm *buffer, FILE *Output)
+static int
+readSolution(struct shm *buffer, FILE *Output)
 {
-    assert(buffer != NULL);
-    struct EdgeList solution = buffer->data[buffer->readhead];
-    buffer->readhead = (buffer->readhead + 1) % MAX_BUFF_SIZE;
+	assert(buffer != NULL);
+	struct EdgeList solution = buffer->data[buffer->readhead];
+	buffer->readhead = (buffer->readhead + 1) % MAX_BUFF_SIZE;
 
-    if (solution.length == 0)
-    {
-        return 1;
-    }
+	if (solution.length == 0) {
+		return 1;
+	}
 
-    if (solution.length < currenBest)
-    {
-        currenBest = solution.length;
+	if (solution.length < currenBest) {
+		currenBest = solution.length;
 
-        fprintf(stderr, "Solution with %zd edges:", solution.length);
-        for (size_t i = 0; i < solution.length; ++i)
-        {
-            fprintf(stderr, " %d-%d", solution.NumberOfEdges[i].u.node_number, solution.NumberOfEdges[i].v.node_number);
-        }
-        fprintf(stderr, "\n");
+		fprintf(stderr, "Solution with %zd edges:", solution.length);
+		for (size_t i = 0; i < solution.length; ++i) {
+			fprintf(stderr, " %d-%d",
+			    solution.NumberOfEdges[i].u.node_number,
+			    solution.NumberOfEdges[i].v.node_number);
+		}
+		fprintf(stderr, "\n");
 
-        if (Output != NULL)
-        {
-            fprintf(Output, "Solution with %zd edges:", solution.length);
-            for (size_t i = 0; i < solution.length; ++i)
-            {
-                fprintf(Output, " %d-%d", solution.NumberOfEdges[i].u.node_number,
-                        solution.NumberOfEdges[i].v.node_number);
-            }
-            fprintf(Output, "\n");
-            fflush(Output);
-        }
-    }
-    return 0;
+		if (Output != NULL) {
+			fprintf(Output, "Solution with %zd edges:",
+			    solution.length);
+			for (size_t i = 0; i < solution.length; ++i) {
+				fprintf(Output, " %d-%d",
+				    solution.NumberOfEdges[i].u.node_number,
+				    solution.NumberOfEdges[i].v.node_number);
+			}
+			fprintf(Output, "\n");
+			fflush(Output);
+		}
+	}
+	return 0;
 }
 
 /**
@@ -88,22 +91,23 @@ static int readSolution(struct shm *buffer, FILE *Output)
  * @param s optionally the optarg string
  * @return uint
  */
-static uint parseInput(const char *s)
+static uint
+parseInput(const char *s)
 {
-    long long rv = 0;
-    assert(s != NULL);
-    char *tmp = strdup(s);
-    char *end = NULL;
-    rv = strtoll(tmp, &end, 10);
-    if (tmp == end || *end != '\0' || rv < 0 || rv > LONG_MAX)
-    {
-        free(tmp);
-        usage(stderr);
-        error_exit("Invalid number, or different error occured");
-    }
-    free(tmp);
-    return (uint)rv;
+	long long rv = 0;
+	assert(s != NULL);
+	char *tmp = strdup(s);
+	char *end = NULL;
+	rv = strtoll(tmp, &end, 10);
+	if (tmp == end || *end != '\0' || rv < 0 || rv > LONG_MAX) {
+		free(tmp);
+		usage(stderr);
+		error_exit("Invalid number, or different error occured");
+	}
+	free(tmp);
+	return (uint)rv;
 }
+
 /**
  * @brief main function
  *
@@ -111,59 +115,58 @@ static uint parseInput(const char *s)
  * @param argv argument vector
  * @return int 0 on success
  */
-int main(int argc, char **argv)
+int
+main(int argc, char **argv)
 {
-    int opt, seconds = 0, limit = 0;
-    bool setDelay = false, setLimit = false;
-    ;
+	int opt, seconds = 0, limit = 0;
+	bool setDelay = false, setLimit = false;
 
-    FILE *out = NULL;
+	FILE *out = NULL;
 
-    while ((opt = getopt(argc, argv, "ho:n:w:")) != -1)
-    {
-        switch (opt)
-        {
-        case 'h':
-            usage(stdout);
-            exit(EXIT_SUCCESS);
-            break;
-        case 'o':
-            out = fopen(optarg, "w+");
-            if (out == NULL)
-            {
-                error_exit("fopen");
-            }
-            break;
-        case 'n':
-            setLimit = true;
-            limit = parseInput(optarg);
-            break;
-        case 'w':
-            setDelay = true;
-            seconds = parseInput(optarg);
-            break;
-        default:
-            usage(stderr);
-            exit(EXIT_FAILURE);
-            break;
-        }
-    }
+	while ((opt = getopt(argc, argv, "ho:n:w:")) != -1) {
+		switch (opt) {
+		case 'h':
+			usage(stdout);
+			exit(EXIT_SUCCESS);
+			break;
+		case 'o':
+			out = fopen(optarg, "w+");
+			if (out == NULL) {
+				error_exit("fopen");
+			}
+			break;
+		case 'n':
+			setLimit = true;
+			limit = parseInput(optarg);
+			break;
+		case 'w':
+			setDelay = true;
+			seconds = parseInput(optarg);
+			break;
+		default:
+			usage(stderr);
+			exit(EXIT_FAILURE);
+			break;
+		}
+	}
 
-    if (optind < argc)
-    {
-        printBuddha();
-        usage(stderr);
-        exit(EXIT_FAILURE);
-    }
+	if (optind < argc) {
+		printBuddha();
+		usage(stderr);
+		exit(EXIT_FAILURE);
+	}
 
-    int shmfd;
-    struct shm *sharedMemory = sharedMemory_Server(&shmfd);
-    sem_t *freeSem, *usedSem, *writeSem;
-    freeSem = initializeSemaphore_Server(FREE_SPACE_SEMAPHORE, FREE_SPACE_SEMAPHORE_SIZE);
-    writeSem = initializeSemaphore_Server(WRITE_SPACE_SEMAPHORE, WRITE_SPACE_SEMAPHORE_SIZE);
-    usedSem = initializeSemaphore_Server(USED_SPACE_SEMAPHORE, USED_SPACE_SEMAPHORE_SIZE);
-    initSignalHandler();
-    sharedMemory->status = 1;
+	int shmfd;
+	struct shm *sharedMemory = sharedMemory_Server(&shmfd);
+	sem_t *freeSem, *usedSem, *writeSem;
+	freeSem = initializeSemaphore_Server(FREE_SPACE_SEMAPHORE,
+	    FREE_SPACE_SEMAPHORE_SIZE);
+	writeSem = initializeSemaphore_Server(WRITE_SPACE_SEMAPHORE,
+	    WRITE_SPACE_SEMAPHORE_SIZE);
+	usedSem = initializeSemaphore_Server(USED_SPACE_SEMAPHORE,
+	    USED_SPACE_SEMAPHORE_SIZE);
+	initSignalHandler();
+	sharedMemory->status = 1;
 
     /*End of the CLI */
 
@@ -171,72 +174,63 @@ int main(int argc, char **argv)
      * @brief The beginning of pure menace
      *
      */
-    if (setDelay && seconds > 0)
-    {
-        delay(seconds);
-    }
+	if (setDelay && seconds > 0) {
+		delay(seconds);
+	}
 
-    int count = 0, stop = 0;
+	int count = 0, stop = 0;
 
-    while (!quit && (!setLimit || count < limit))
-    {
-        if (sem_wait(usedSem) == -1)
-        {
-            if (errno == EINTR)
-            {
-                continue;
-            }
-            error_exit("Couldn't initialize sempahore");
-        }
-        if (quit)
-        {
-            sharedMemory->status = 0;
-            break;
-        }
-        stop = readSolution(sharedMemory, out);
-        count++;
+	while (!quit && (!setLimit || count < limit)) {
+		if (sem_wait(usedSem) == -1) {
+			if (errno == EINTR) {
+				continue;
+			}
+			error_exit("Couldn't initialize sempahore");
+		}
+		if (quit) {
+			sharedMemory->status = 0;
+			break;
+		}
+		stop = readSolution(sharedMemory, out);
+		count++;
 
-        if (sem_post(freeSem) == -1)
-        {
-            printBuddha();
-            error_exit("sem_post (free)");
-        }
-        if (stop)
-        {
-            break;
-        }
-    }
+		if (sem_post(freeSem) == -1) {
+			printBuddha();
+			error_exit("sem_post (free)");
+		}
+		if (stop) {
+			break;
+		}
+	}
 
-    sharedMemory->status = 0;
-    if (stop)
-    {
-        printf("The graph is acyclic!\n");
-        if (out != NULL)
-            fprintf(out, "The graph is acyclic!\n");
-    }
-    else if (currenBest != SSIZE_MAX)
-    {
-        printf("The graph might not be acyclic, best solution removes %zd edges.\n", currenBest);
-        if (out != NULL)
-            fprintf(out, "The graph might not be acyclic, best solution removes %zd edges.\n", currenBest);
-    }
+	sharedMemory->status = 0;
+	if (stop) {
+		printf("The graph is acyclic!\n");
+		if (out != NULL)
+			fprintf(out, "The graph is acyclic!\n");
+	} else if (currenBest != SSIZE_MAX) {
+		printf("The graph might not be acyclic, best solution removes %zd edges.\n",
+		    currenBest);
+		if (out != NULL)
+			fprintf(out,
+			    "The graph might not be acyclic, best solution removes %zd edges.\n",
+			    currenBest);
+	}
 
     /*Not quite necessecary, but good behaviour*/
     /*see https://jprofesorek.mooo.com/jkonczak/os_cp:semaphores */
-    for (int i = 0; i < MAX_BUFF_SIZE; ++i)
-    {
-        sem_post(freeSem);
-    }
-    cleanSemaphore_Server(freeSem, FREE_SPACE_SEMAPHORE);
-    cleanSemaphore_Server(usedSem, USED_SPACE_SEMAPHORE);
-    cleanSemaphore_Server(writeSem, WRITE_SPACE_SEMAPHORE);
+	for (int i = 0; i < MAX_BUFF_SIZE; ++i) {
+		sem_post(freeSem);
+	}
+	cleanSemaphore_Server(freeSem, FREE_SPACE_SEMAPHORE);
+	cleanSemaphore_Server(usedSem, USED_SPACE_SEMAPHORE);
+	cleanSemaphore_Server(writeSem, WRITE_SPACE_SEMAPHORE);
 
-    cleanSharedMemory_Server(sharedMemory, shmfd);
+	cleanSharedMemory_Server(sharedMemory, shmfd);
 
-    if (out != NULL)
-    {
-        fclose(out);
-    }
+	if (out != NULL) {
+		fclose(out);
+	}
 
-    return EXIT_SUCCESS;
+	return EXIT_SUCCESS;
 }

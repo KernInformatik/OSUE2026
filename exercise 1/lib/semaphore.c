@@ -12,91 +12,98 @@
 
 volatile sig_atomic_t quit = false;
 // static sem_t *wakeSem = NULL;
-static void onSignal(int sig, siginfo_t *info, void *unused)
+static void
+onSignal(int sig, siginfo_t *info, void *unused)
 {
-    (void)sig;
-    (void)info;
-    (void)unused;
-    int saved = errno;
-    quit = 1;
-    errno = saved;
+	(void)sig;
+	(void)info;
+	(void)unused;
+	int saved = errno;
+	quit = 1;
+	errno = saved;
 }
 
-void initSignalHandler()
+void
+initSignalHandler()
 {
-
-    struct sigaction sa;
+	struct sigaction sa;
     // memset(&sa, 0, sizeof(sa));
-    sa.sa_flags = SA_SIGINFO; /* no SA_RESTART */
-    sigemptyset(&sa.sa_mask);
-    sa.sa_sigaction = onSignal;
+	sa.sa_flags = SA_SIGINFO; /* no SA_RESTART */
+	sigemptyset(&sa.sa_mask);
+	sa.sa_sigaction = onSignal;
 
-    if (sigaction(SIGINT, &sa, NULL) == -1)
-        error_exit("sigaction SIGINT");
-    if (sigaction(SIGTERM, &sa, NULL) == -1)
-        error_exit("sigaction SIGTERM");
+	if (sigaction(SIGINT, &sa, NULL) == -1)
+		error_exit("sigaction SIGINT");
+	if (sigaction(SIGTERM, &sa, NULL) == -1)
+		error_exit("sigaction SIGTERM");
 }
 
 /*BEGINE HELPER FUNCTIONS*/
-static inline struct shm *sharedMemory(int *shmfd, bool isServer)
+static inline struct shm *
+sharedMemory(int *shmfd, bool isServer)
 {
-    struct shm *rv = NULL;
+	struct shm *rv = NULL;
 
-    *shmfd = isServer ? shm_open(SHM_NAME, SHM_OFLAG_SERVER, SHM_MODE) : shm_open(SHM_NAME, SHM_OFLAG_CLIENT, SHM_MODE);
+	*shmfd = isServer ? shm_open(SHM_NAME, SHM_OFLAG_SERVER, SHM_MODE) : shm_open(SHM_NAME,
+	    SHM_OFLAG_CLIENT, SHM_MODE);
 
-    error_exit_failure(*shmfd, (isServer ? (OPENING_SHM_ERROR_SERVER) : (OPENING_SHM_ERROR_CLIENT)));
+	error_exit_failure(*shmfd,
+	    (isServer ? (OPENING_SHM_ERROR_SERVER) :
+	     (OPENING_SHM_ERROR_CLIENT)));
 
-    if (isServer)
-    {
-        error_exit_failure(ftruncate(*shmfd, sizeof(struct shm)), TRUNCATING_SHM_ERROR);
-    }
+	if (isServer) {
+		error_exit_failure(ftruncate(*shmfd, sizeof(struct shm)),
+		    TRUNCATING_SHM_ERROR);
+	}
 
-    rv = (struct shm *)mmap(NULL, sizeof(struct shm), MMP_PROT_FLAGS, MMP_FLAGS, *shmfd, MMP_OFFSET);
+	rv = (struct shm *)mmap(NULL, sizeof(struct shm), MMP_PROT_FLAGS,
+	    MMP_FLAGS, *shmfd, MMP_OFFSET);
 
-    if (rv == MAP_FAILED)
-        error_exit(MAPPING_SHM_ERROR);
+	if (rv == MAP_FAILED)
+		error_exit(MAPPING_SHM_ERROR);
 
-    if (isServer)
-    {
-        memset(rv, 0, sizeof(*rv));
-    }
-    return rv;
+	if (isServer) {
+		memset(rv, 0, sizeof(*rv));
+	}
+	return rv;
 }
 
-static inline int cleanSharedMemory(struct shm *shm, int *shmfd, bool isServer)
+static inline int
+cleanSharedMemory(struct shm *shm, int *shmfd, bool isServer)
 {
 
-    error_exit_failure(munmap(shm, sizeof(*shm)), UNMAPPING_SHM_ERROR);
-    error_exit_failure(close(*shmfd), CLOSING_SHM_ERROR);
+	error_exit_failure(munmap(shm, sizeof(*shm)), UNMAPPING_SHM_ERROR);
+	error_exit_failure(close(*shmfd), CLOSING_SHM_ERROR);
 
-    if (isServer)
-    {
-        error_exit_failure(shm_unlink(SHM_NAME), UNLINKING_SHM_ERROR);
-    }
+	if (isServer) {
+		error_exit_failure(shm_unlink(SHM_NAME), UNLINKING_SHM_ERROR);
+	}
 
-    return 0;
+	return 0;
 }
 
-static inline sem_t *initializeSemaphore(const char *sem_name, unsigned int init_value, bool isServer)
+static inline sem_t *
+initializeSemaphore(const char *sem_name, unsigned int init_value,
+    bool isServer)
 {
-    sem_t *rv = isServer ? sem_open(sem_name, OPEN_SEM_MODE_SERVER, OPEN_SEM_MODE, init_value)
-                         : sem_open(sem_name, OPEN_SEM_MODE_CLIENT, OPEN_SEM_MODE, init_value);
-    if (rv == SEM_FAILED)
-    {
-        error_exit(OPENING_SEM_ERROR);
-    }
+	sem_t *rv = isServer ? sem_open(sem_name, OPEN_SEM_MODE_SERVER,
+	    OPEN_SEM_MODE, init_value) : sem_open(sem_name,
+	    OPEN_SEM_MODE_CLIENT, OPEN_SEM_MODE, init_value);
+	if (rv == SEM_FAILED) {
+		error_exit(OPENING_SEM_ERROR);
+	}
 
-    return rv;
+	return rv;
 }
 
-static inline void cleanSemaphore(const char *sem_name, sem_t *semaphore, bool isServer)
+static inline void
+cleanSemaphore(const char *sem_name, sem_t *semaphore, bool isServer)
 {
-    error_exit_failure(sem_close(semaphore), CLOSING_SEM_ERROR);
+	error_exit_failure(sem_close(semaphore), CLOSING_SEM_ERROR);
 
-    if (isServer)
-    {
-        error_exit_failure(sem_unlink(sem_name), UNLINKING_SEM_ERROR);
-    }
+	if (isServer) {
+		error_exit_failure(sem_unlink(sem_name), UNLINKING_SEM_ERROR);
+	}
 }
 
 /*END HELPER FUNCTIONS*/
@@ -106,58 +113,66 @@ static inline void cleanSemaphore(const char *sem_name, sem_t *semaphore, bool i
 /*BEGIN INTERFACE*/
 /*See semaphore.h for documentation */
 
-struct shm *sharedMemory_Server(int *shmfd)
+struct shm *
+sharedMemory_Server(int *shmfd)
 {
-    return sharedMemory(shmfd, true);
+	return sharedMemory(shmfd, true);
 }
 
 /*See semaphore.h for documentation */
 
-struct shm *sharedMemory_Client(int *shmfd)
+struct shm *
+sharedMemory_Client(int *shmfd)
 {
 
-    return sharedMemory(shmfd, false);
+	return sharedMemory(shmfd, false);
 }
 
 /*See semaphore.h for documentation */
 
-void cleanSharedMemory_Server(struct shm *shm, int shmfd)
+void
+cleanSharedMemory_Server(struct shm *shm, int shmfd)
 {
-    cleanSharedMemory(shm, &shmfd, true);
+	cleanSharedMemory(shm, &shmfd, true);
 }
 
 /*See semaphore.h for documentation */
 
-void cleanSharedMemory_Client(struct shm *shm, int shmfd)
+void
+cleanSharedMemory_Client(struct shm *shm, int shmfd)
 {
-    cleanSharedMemory(shm, &shmfd, false);
+	cleanSharedMemory(shm, &shmfd, false);
 }
 
 /*See semaphore.h for documentation */
-sem_t *initializeSemaphore_Server(const char *sem_name, unsigned int init_value)
+sem_t *
+initializeSemaphore_Server(const char *sem_name, unsigned int init_value)
 {
-    return initializeSemaphore(sem_name, init_value, true);
-}
-
-/*See semaphore.h for documentation */
-
-sem_t *initializeSemaphore_Client(const char *sem_name)
-{
-
-    return initializeSemaphore(sem_name, 0, false);
-}
-
-/*See semaphore.h for documentation */
-void cleanSemaphore_Server(sem_t *semaphore, const char *sem_name)
-{
-    cleanSemaphore(sem_name, semaphore, true);
+	return initializeSemaphore(sem_name, init_value, true);
 }
 
 /*See semaphore.h for documentation */
 
-void cleanSemaphore_Client(sem_t *semaphore)
+sem_t *
+initializeSemaphore_Client(const char *sem_name)
 {
-    cleanSemaphore(NULL, semaphore, false);
+
+	return initializeSemaphore(sem_name, 0, false);
+}
+
+/*See semaphore.h for documentation */
+void
+cleanSemaphore_Server(sem_t *semaphore, const char *sem_name)
+{
+	cleanSemaphore(sem_name, semaphore, true);
+}
+
+/*See semaphore.h for documentation */
+
+void
+cleanSemaphore_Client(sem_t *semaphore)
+{
+	cleanSemaphore(NULL, semaphore, false);
 }
 
 /*END INTERFACE*/
