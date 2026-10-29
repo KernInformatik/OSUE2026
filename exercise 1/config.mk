@@ -32,4 +32,4 @@ LIB_SEM_INTF_NAME := libsemaphore_interface.so
 LIB_SEM_INTF := $(LIB_SEM_INTF_NAME)
 
 LIB_SRCS := semaphore.c
-LIB_OBJS := __lib.so
+LIB_OBJS := libsemaphore_interface.o
