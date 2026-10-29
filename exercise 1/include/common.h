@@ -37,44 +37,16 @@
 #include <time.h>
 #include <unistd.h>
 
-static inline void
-error_exit(const char *msg)
+static inline void error_exit(const char *msg)
 {
-	fprintf(stderr, "%s\n", msg);
-	exit(EXIT_FAILURE);
+    fprintf(stderr, "%s\n", msg);
+    exit(EXIT_FAILURE);
 }
 
-static inline void
-error_exit_failure(int val, const char *msg)
+static inline void error_exit_failure(int val, const char *msg)
 {
-	if (val == -1)
-		error_exit(msg);
-}
-
-static inline void
-printBuddha()
-{
-	printf("                 _ooOoo_\n"
-	    "                  o8888888o\n"
-	    "                  88\" . \"88\n"
-	    "                  (| -_- |)\n"
-	    "                  O\\  =  /O\n"
-	    "               ____/`---'\\____\n"
-	    "             .'  \\\\|     |//  `.\n"
-	    "            /  \\\\|||  :  |||//  \\\n"
-	    "           /  _||||| -:- |||||-  \\\n"
-	    "           |   | \\\\\\  -  /// |   |\n"
-	    "           | \\_|  ''\\---/''  |   |\n"
-	    "           \\  .-\\__  `-`  ___/-. /\n"
-	    "         ___`. .'  /--.--\\  `. . __\n"
-	    "      .\"\" '<  `.___\\_<|>_/___.'  >'\"\".\n"
-	    "     | | :  `- \\`.;`\\ _ /`;.`/ - ` : | |\n"
-	    "     \\  \\ `-.   \\_ __\\ /__ _/   .-` /  /\n"
-	    "======`-.____`-.___\\_____/___.-`____.-'======\n"
-	    "                   `=---='\n"
-	    "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"
-	    "         I AM KING TERRY THE TERRIBLE佛祖保佑       永無 BUG\n");
-	return;
+    if (val == -1)
+        error_exit(msg);
 }
 
 #endif

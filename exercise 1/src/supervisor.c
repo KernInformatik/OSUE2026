@@ -151,7 +151,6 @@ main(int argc, char **argv)
 	}
 
 	if (optind < argc) {
-		printBuddha();
 		usage(stderr);
 		exit(EXIT_FAILURE);
 	}
@@ -195,7 +194,6 @@ main(int argc, char **argv)
 		count++;
 
 		if (sem_post(freeSem) == -1) {
-			printBuddha();
 			error_exit("sem_post (free)");
 		}
 		if (stop) {

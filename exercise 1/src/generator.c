@@ -40,19 +40,16 @@ parseInput(int argc, char **argv)
 
     /* Error checking*/
 	if ((argc - 1) < 1) {
-		printBuddha();
 		error_exit("too few arguments");
 	}
 
 	if ((argc - 1) > 256) {
-		printBuddha();
 		error_exit("too many arguments");
 	}
 
 	for (int i = 1; i < argc; i++) {
 		for (int j = i + 1; j < argc; j++) {
 			if (strcmp(argv[i], argv[j]) == 0) {
-				printBuddha();
 				error_exit("duplicate arguments");
 			}
 		}
@@ -60,14 +57,12 @@ parseInput(int argc, char **argv)
 
 	for (int i = 1; i < argc; i++) {
 		if (strchr(argv[i], '-') == NULL) {
-			printBuddha();
 			error_exit("no dash in argument");
 		}
 	}
 
 	for (int i = 1; i < argc; i++) {
 		if (strchr(argv[i], '-') != strrchr(argv[i], '-')) {
-			printBuddha();
 			error_exit("to many dashes in argument");
 		}
 	}
@@ -81,20 +76,17 @@ parseInput(int argc, char **argv)
 		char *second = strtok_r(NULL, "-", &savePtr);
 
 		if ((first == NULL) || (second == NULL)) {
-			printBuddha();
 			error_exit("missing nodes in arguments");
 		}
 
 		for (size_t i = 0; i < strlen(first); i++) {
 			if (!isdigit(first[i])) {
-				printBuddha();
 				error_exit("No digits in argument node");
 			}
 		}
 
 		for (size_t i = 0; i < strlen(second); i++) {
 			if (!isdigit(second[i])) {
-				printBuddha();
 				error_exit("No digits in argument node");
 			}
 		}
