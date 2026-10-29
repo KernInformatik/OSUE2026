@@ -11,7 +11,7 @@
 
 #ifndef GRAPH_H
 #define GRAPH_H
-#include "../include/common.h"
+#include "common.h"
 #include <sys/types.h>
 
 #define MAX_SOLUTION_EDGES 8

@@ -11,30 +11,25 @@ COMMON_FLAGS := -std=c99 -pedantic -Wall -O2 \
 ASAN := -fsanitize=address -fsanitize=undefined -fno-omit-frame-pointer -fno-common
 CFLAGS := $(COMMON_FLAGS)
 
-# directories
-SRC_DIR := src
-BIN_DIR := build
-INCLUDE_DIR := include
-LIB_DIR := lib
 
 #https://stackoverflow.com/questions/2754966/cflags-vs-cppflags
-CPPFLAGS := -I$(INCLUDE_DIR) -I$(SRC_DIR)
+#CPPFLAGS := -I$(INCLUDE_DIR) -I$(SRC_DIR)
 
 # source files
-GENERATOR_SRC := $(SRC_DIR)/generator.c
-SUPERVISOR_SRC := $(SRC_DIR)/supervisor.c
+GENERATOR_SRC := generator.c
+SUPERVISOR_SRC := supervisor.c
 
 # object files
-GENERATOR_OBJ := $(BIN_DIR)/generator.o
-SUPERVISOR_OBJ := $(BIN_DIR)/supervisor.o
+GENERATOR_OBJ := generator.o
+SUPERVISOR_OBJ := supervisor.o
 
 # executables
-GENERATOR := $(BIN_DIR)/generator
-SUPERVISOR := $(BIN_DIR)/supervisor
+GENERATOR := generator
+SUPERVISOR := supervisor
 
 # library
 LIB_SEM_INTF_NAME := libsemaphore_interface.so
-LIB_SEM_INTF := $(BIN_DIR)/$(LIB_SEM_INTF_NAME)
+LIB_SEM_INTF := $(LIB_SEM_INTF_NAME)
 
-LIB_SRCS := $(wildcard $(LIB_DIR)/*.c)
-LIB_OBJS := $(patsubst $(LIB_DIR)/%.c,$(BIN_DIR)/lib/%.o,$(LIB_SRCS))
+LIB_SRCS := semaphore.c
+LIB_OBJS := __lib.so

@@ -9,7 +9,7 @@
  * @copyright Copyright (c) 2026
  *
  */
-#include "../include/__semaphore_interface.h"
+#include "__semaphore_interface.h"
 
 /**
  * @brief prints a usage prompt, can be called if an error occurs, unlike the supervisor, the generator doesn't have an

@@ -8,7 +8,7 @@
  * @copyright Copyright (c) 2026
  *
  */
-#include "../include/__semaphore_interface.h"
+#include "__semaphore_interface.h"
 
 extern volatile sig_atomic_t quit;
 
