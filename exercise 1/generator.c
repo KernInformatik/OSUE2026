@@ -266,6 +266,9 @@ void writeSolution(const struct EdgeList graph, struct shm *sharedMemory, sem_t 
  */
 int main(int argc, char **argv)
 {
+
+    // AUCH WENN MAN KEINE ARGUMENTE EINSEZTEN MUSS ARGUMENT PARSING IENBAUEN
+
     int shmfd;
     struct shm *possibleSolution = sharedMemory_Client(&shmfd);
     sem_t *freeSem, *usedSem, *writeSem;
