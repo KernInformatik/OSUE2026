@@ -23,7 +23,6 @@ altered to fit the needs of this project.
 #define SEMAPHORE_H
 
 #include "common.h"
-#include "graph.h"
 #define MAX_BUFF_SIZE 7
 
 /**
@@ -36,7 +35,7 @@ altered to fit the needs of this project.
  */
 struct shm
 {
-    struct EdgeList data[MAX_BUFF_SIZE];
+    // struct EdgeList data[MAX_BUFF_SIZE];
     size_t readhead;
     size_t writehead;
     volatile int status;
