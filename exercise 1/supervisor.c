@@ -9,6 +9,8 @@
  *
  */
 #include "__semaphore_interface.h"
+#include "common.h"
+#include <stdio.h>
 
 extern volatile sig_atomic_t quit;
 
@@ -135,15 +137,28 @@ int main(int argc, char **argv)
             }
             break;
         case 'n':
+            if (setLimit)
+            {
+                fclose(out);
+                usage(stdout);
+                error_exit("See the snynopsis");
+            }
             setLimit = true;
             limit = parseInput(optarg);
             break;
         case 'w':
+            if (setDelay)
+            {
+                fclose(out);
+                usage(stdout);
+                error_exit("See the snynopsis");
+            }
             setDelay = true;
             seconds = parseInput(optarg);
             break;
         default:
-            usage(stdout);
+            fclose(out);
+            usage(stderr);
             exit(EXIT_FAILURE);
             break;
         }
@@ -152,6 +167,7 @@ int main(int argc, char **argv)
     if (optind < argc)
     {
         usage(stderr);
+        fclose(out);
         exit(EXIT_FAILURE);
     }
 
