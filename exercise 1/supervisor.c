@@ -97,6 +97,7 @@ static uint parseInput(const char *s)
     char *tmp = strdup(s);
     char *end = NULL;
     rv = strtoll(tmp, &end, 10);
+    // IMMER END POINTER SETZEN
     if (tmp == end || *end != '\0' || rv < 0 || rv > LONG_MAX)
     {
         free(tmp);
@@ -125,6 +126,7 @@ int main(int argc, char **argv)
     {
         switch (opt)
         {
+            // if abfrage bei den -n -n bpoundary checking i guess nichtr doppelt eingeben
         case 'h':
             usage(stdout);
             exit(EXIT_SUCCESS);
@@ -139,9 +141,12 @@ int main(int argc, char **argv)
         case 'n':
             if (setLimit)
             {
+<<<<<<< HEAD
                 fclose(out);
                 usage(stdout);
                 error_exit("See the snynopsis");
+=======
+>>>>>>> f8c0b4c5ff1ce0bffe7ea46e0fa325cd97416093
             }
             setLimit = true;
             limit = parseInput(optarg);
