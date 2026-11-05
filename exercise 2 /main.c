@@ -14,7 +14,7 @@
 void usage()
 {
     printf("quadtree <goal> <distance> <min_x> <max_x> <min_y> <max_y>\n");
-    return;
+    error_exit("Wrong Input...Exiting\n");
 }
 
 static inline int countLines(char *s)
