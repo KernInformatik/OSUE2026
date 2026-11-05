@@ -6,26 +6,23 @@ CC := gcc
 # flags
 COMMON_FLAGS := -std=c99 -pedantic -Wall -O2 \
 	-D_DEFAULT_SOURCE -D_BSD_SOURCE -D_SVID_SOURCE \
-	-D_POSIX_C_SOURCE=200809L -g
+	-D_POSIX_C_SOURCE=200809L -g -lm
 
 ASAN := -fsanitize=address -fsanitize=undefined -fno-omit-frame-pointer -fno-common
-CFLAGS := $(COMMON_FLAGS)
+CFLAGS := $(COMMON_FLAGS) $(ASAN)
 
 
 #https://stackoverflow.com/questions/2754966/cflags-vs-cppflags
 #CPPFLAGS := -I$(INCLUDE_DIR) -I$(SRC_DIR)
 
 # source files
-GENERATOR_SRC := generator.c
-SUPERVISOR_SRC := supervisor.c
+MAIN_SRC := main.c
 
 # object files
-GENERATOR_OBJ := generator.o
-SUPERVISOR_OBJ := supervisor.o
+MAIN_OBJ := main.o
 
 # executables
-GENERATOR := generator
-SUPERVISOR := supervisor
+MAIN := main
 
 # library
 LIB_SEM_INTF_NAME := libsemaphore_interface.so

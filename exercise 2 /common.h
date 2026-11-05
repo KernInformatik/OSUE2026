@@ -22,6 +22,7 @@
 #include <fcntl.h>
 #include <getopt.h>
 #include <limits.h>
+#include <math.h>
 #include <regex.h>
 #include <semaphore.h>
 #include <semaphore.h> // for sem_t

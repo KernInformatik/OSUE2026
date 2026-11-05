@@ -6,7 +6,7 @@ options:
 	@echo "CFLAGS = $(CFLAGS)"
 	@echo "CC     = $(CC)"
 
-all: lib $(GENERATOR) $(SUPERVISOR)
+all: lib $(MAIN)
 
 lib: $(LIB_SEM_INTF)
 
@@ -19,13 +19,8 @@ $(LIB_OBJS):$(LIB_SRCS)
 $(LIB_SEM_INTF): $(LIB_OBJS)
 	$(CC) $(CFLAGS) -shared -o $@ $^ -pthread -lrt
 
-$(GENERATOR): $(GENERATOR_OBJ) $(LIB_OBJS)
-	$(CC) $(CFLAGS) -o $@ $(GENERATOR_OBJ) -L. -lsemaphore_interface -Wl,-rpath,'$$ORIGIN' -pthread -lrt
-
-$(SUPERVISOR): $(SUPERVISOR_OBJ) $(LIB_OBJS)
-	$(CC) $(CFLAGS) -o $@ $(SUPERVISOR_OBJ) -L. -lsemaphore_interface -Wl,-rpath,'$$ORIGIN' -pthread -lrt
-
-
+$(MAIN): $(MAIN_OBJ) $(LIB_OBJS)
+	$(CC) $(CFLAGS) -o $@ $(MAIN_OBJ) -L. -lsemaphore_interface -Wl,-rpath,'$$ORIGIN' -pthread -lrt
 
 doc:
 	doxygen Doxyfile
