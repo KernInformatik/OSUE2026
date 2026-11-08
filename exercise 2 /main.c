@@ -10,6 +10,11 @@
  */
 
 #include "common.h"
+#include <stddef.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/types.h>
+#include <unistd.h>
 
 void usage()
 {
@@ -32,7 +37,7 @@ static inline int countLines(char *s)
             nl++;
         }
     }
-
+    c = 0;
     return nl;
 }
 
@@ -43,5 +48,27 @@ float parseInput(int argc, char **argv)
 
 int main(int argc, char **argv)
 {
+    char *line = NULL;
+    size_t size = 0;
+    ssize_t nread;
+
+    if (argc != 2)
+    {
+        size = 0;
+        nread = 0;
+        free(line);
+        fflush(stdout);
+        usage();
+        fprintf(stderr, "Error occured");
+        exit(EXIT_FAILURE);
+    }
+
+    while ((nread = getline(&line, &size, fopen(argv[1], "r"))) != -1)
+    {
+    }
+
+    size = 0;
+    nread = 0;
+    free(line);
     exit(EXIT_SUCCESS);
 }
