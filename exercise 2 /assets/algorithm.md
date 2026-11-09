@@ -1,107 +1,46 @@
-# Sketching
+# quadtree – Algorithmus und Pseudocode (Übung 2, 191.002 Betriebssysteme)
 
-Idea: every process is one node of the quadtree. It reads its points from `stdin`, validates them, splits them into the 4 quadrants, forks one child per quadrant (`fork` + `execlp` of the same program) and sends each child only the points of its quadrant via pipe. The child does the same again with a smaller rectangle, until only 1 line is left -> distance check -> print. The parent collects what the children print and passes it up in a fixed order.
+## 1. Worum geht es?
 
-So: not 1 fork per point, always exactly 4 children per process (one per quadrant). The recursion happens through the processes themselves.
+Das Programm bekommt viele 2D-Punkte über `stdin` (eine Zeile pro Punkt, z. B. `1,1`), einen Zielpunkt `goal` und eine Maximaldistanz `distance`. Es gibt alle Punkte aus, die höchstens `distance` vom Ziel entfernt sind, im Format `1.414: 1,1`.
 
-No shared memory, no delays: pipes + `wait` already do the synchronizing.
+Eine einfache Schleife würde dafür reichen. Das Ziel der Übung ist aber, **fork, exec und Pipes** zu üben. Darum muss die Suche als **Baum aus Prozessen** laufen: Jeder Prozess ist ein Knoten und startet sich selbst vier Mal neu (einmal pro Quadrant).
 
-<br>
+**Wichtig:** Es gibt keine Quadtree-Datenstruktur (keine Knoten, keine Zeiger). Der „Baum“ existiert nur als Prozessbaum, solange das Programm läuft.
 
-## Where is the recursion? (no quadtree struct needed)
-
-I do NOT implement a quadtree data structure. No nodes, no pointers, no tree struct. The recursion is the program calling itself as a new process. `main()` is the recursive function, and one run of the program does exactly ONE level.
-
-| normal recursive function | this exercise |
+| normale Rekursion | in dieser Aufgabe |
 |---|---|
-| function calls itself | program starts itself (`fork` + `execlp(argv[0], ...)`) |
-| parameters (array, bounds) | `stdin` (the points) + command line args (goal, distance, limits) |
-| return value | `stdout` (the result lines) + exit status |
-| call stack | process tree |
-| base case: `if (n <= 1) return` | base case: 0 or 1 line -> print and exit, no fork |
+| Funktion ruft sich selbst auf | Programm startet sich selbst (`fork` + `execlp(argv[0], ...)`) |
+| Parameter (Array, Grenzen) | `stdin` (die Punkte) + Kommandozeilenargumente (Ziel, Distanz, Grenzen) |
+| Rückgabewert | `stdout` (Ergebniszeilen) + Exit-Status |
+| Aufrufstack | Prozessbaum |
+| Abbruchbedingung `if (n <= 1) return` | 0 oder 1 Zeile: ausgeben und beenden, kein `fork` |
+
+---
+
+## 2. Aufruf
 
 ```
-main():
-    parse args
-    read all lines from stdin
-    if 0 lines:   exit
-    if 1 line:    check distance, print, exit        <- base case, recursion stops
-    split the lines into 4 groups by quadrant
-    for each group: start a child of this same program   <- the "recursive call"
-                    (limits = the smaller rectangle)
-    feed each child its group via pipe                   <- "passing the parameters"
-    read each child's output, print it in order          <- "using the return values"
-    wait for the children
+./quadtree <goal_x>,<goal_y> <distance> <min_x> <max_x> <min_y> <max_y>
 ```
 
-The "tree" is only the tree of processes that exists while the program runs. It is never built in memory.
+- Reihenfolge der Grenzen: `min_x max_x min_y max_y`.
+- `argc != 7` → Usage auf **stdout**, `EXIT_FAILURE` (Testcase 08).
+- Parsen mit `strtof` (alles als `float`, passend zu `sqrtf`/`powf`). Danach prüfen, dass der ganze String verbraucht wurde (`endptr`).
+- Beim Ziel muss das Komma zwischen x und y geprüft werden.
+- Parse-Fehler → Meldung auf **stderr** (mit `argv[0]`), `EXIT_FAILURE`.
+- `goal` und `distance` bleiben immer gleich und werden 1:1 an jedes Kind weitergegeben. Nur die 4 Grenzen ändern sich.
 
-Trace for `./quadtree 0,0 4.5 -10 10 -10 10 < 1.txt` (points `1,1`, `2,-2`, `-3,3`, `-4,-4`):
+---
+
+## 3. Die Quadranten
+
+Das Rechteck wird in der **eigenen Mitte** geteilt (nicht beim Ziel):
 
 ```
-process 1  (limits -10..10, 4 lines)  -> mid = 0,0
-  ├─ BL child: -4,-4   -> 1 line: distance 5.66 > 4.5, prints nothing
-  ├─ BR child:  2,-2   -> 1 line: prints "2.828: 2,-2"
-  ├─ TL child: -3,3    -> 1 line: prints "4.243: -3,3"
-  └─ TR child:  1,1    -> 1 line: prints "1.414: 1,1"
-process 1 reads BL, BR, TL, TR in that order and prints the combined output
+mid_x = (min_x + max_x) / 2
+mid_y = (min_y + max_y) / 2
 ```
-
-A child that gets more than 1 line does the same again and starts its own 4 children. The rectangle gets smaller on every level, so there are fewer points per process.
-
-What I actually write:
-1. parsing + checking (args, lines)
-2. the base cases
-3. quadrant decision + the 4 new limits (only a few lines of arithmetic, this is the whole "quadtree" part)
-4. the plumbing: pipes, fork, exec, feeding, reading, waiting (most of the work)
-
-<br>
-
-## Args
-
-`./quadtree <goal_x>,<goal_y> <distance> <min_x> <max_x> <min_y> <max_y>`
-
-- **`argc != 7` -> print usage to `stdout`, `EXIT_FAILURE`** (testcase 08: `./quadtree 10`). Usage message contains `argv[0]` and the synopsis.
-- order of the 4 limits: `min_x max_x min_y max_y` (as in the SYNOPSIS)
-- parse with **`strtof`** (the assignment says `strtof`/`powf`/`sqrtf`, so use `float` everywhere), check that the whole string was consumed (`endptr`)
-- goal: check for the comma between x and y
-- anything fails to parse -> error message on `stderr` (with `argv[0]`), `EXIT_FAILURE`
-- `<goal>` and `<distance>` never change, they get passed 1:1 to every child. Only the 4 limits change.
-- ONE helper `parse_point(const char *line, float *x, float *y)` is used for the goal, for every input line (leaf AND split), and returns an error if the comma is missing, a number is bad or there is trailing garbage. Strip the trailing `\n` before parsing.
-
-<br>
-
-## main.c should contain
-
-- parse args (see above)
-- read ALL lines until EOF into a dynamic array (`getline` or `fgets` + `realloc`, no idea how many lines come). Initial capacity = macro.
-- store the raw text of each line AND the parsed `float x, y` per entry (struct). The child gets exactly the raw text, nothing changes through printing/rounding. The parsed values are used for splitting + duplicate check.
-- validate: every line must parse (testcase 09: input `1,` -> error message on `stderr`, `EXIT_FAILURE`). This happens BEFORE any fork, so no children have to be cleaned up.
-- base cases (see below)
-- split into 4 quadrants + 4 children
-- merge the output + `wait`
-
-A SoA per quadrant isn't really needed: one array with all entries, and per child just go through it and write the lines that belong to its quadrant. Less mallocs/frees.
-
-<br>
-
-## Base cases of one process
-
-- 0 lines -> `EXIT_SUCCESS`, print nothing (happens all the time, empty quadrants; not specified in the assignment but the natural reading)
-- 1 line -> (already validated) distance = `sqrtf(powf(x - goal_x, 2) + powf(y - goal_y, 2))`. If `<= <distance>` print `%.3f: x,y` (raw text of the line), then `EXIT_SUCCESS`. The distance is always to the goal, never to the pivot.
-- n > 1 lines -> **dedup**: keep the FIRST line, drop every later line whose parsed values equal the first line (compare `x`/`y`, not the text: `1.0,1` == `1,1`). The first line itself is kept exactly once.
-  - if exactly 1 line is left (= all lines were identical) -> treat it like the 1-line case (distance check + print, `EXIT_SUCCESS`). This is what "additional-1" (`1,1` twice -> `1.414: 1,1`) expects.
-  - otherwise split. (The dedup guarantees every child gets fewer lines than the parent has, or at least a smaller rectangle -> no endless recursion.)
-
-Note: only the lines equal to the *first* line are dropped. Duplicates of other points are still passed down; they get dropped on a deeper level when they become the first line of a child.
-
-<br>
-
-## Pre-Algorithm
-
-- Split the canvas vertically and horizontally at the center of the own rectangle (NOT at the goal):
-  - `mid_x = (min_x + max_x) / 2`
-  - `mid_y = (min_y + max_y) / 2`
 
 ```
  max_y +-----------+-----------+
@@ -112,129 +51,278 @@ Note: only the lines equal to the *first* line are dropped. Duplicates of other 
      min_x       mid_x       max_x
 ```
 
-- Limits for each child:
+| Kind | Index | min_x | max_x | min_y | max_y |
+|------|-------|-------|-------|-------|-------|
+| BL   | 0 | min_x | mid_x | min_y | mid_y |
+| BR   | 1 | mid_x | max_x | min_y | mid_y |
+| TL   | 2 | min_x | mid_x | mid_y | max_y |
+| TR   | 3 | mid_x | max_x | mid_y | max_y |
 
-| child | min_x | max_x | min_y | max_y |
-|-------|-------|-------|-------|-------|
-| BL    | min_x | mid_x | min_y | mid_y |
-| BR    | mid_x | max_x | min_y | mid_y |
-| TL    | min_x | mid_x | mid_y | max_y |
-| TR    | mid_x | max_x | mid_y | max_y |
+**Randregel (kein freier Spielraum):** `x <= mid_x` → links, `y <= mid_y` → unten. Punkte genau auf der Mittellinie gehören also nach links bzw. unten. Nur so stimmt die Ausgabereihenfolge von Testcase 03.
 
-- **Which quadrant does a point belong to:** `x <= mid_x` -> left, else right. `y <= mid_y` -> bottom, else top. **The `<=` is not a free choice:** testcase 03 (easy-2) only gives the expected output order if points on the center line go to the left/bottom quadrant (with `<` the points `2,0` / `2,1` land in the same child as `3,0` and the output order is wrong). Hand-traced the whole recursion for testcase 03 with `<=`: matches the expected output.
-- The limits go to the children as text -> print the midpoints with enough digits for `float`: `%.9g`. That round-trips exactly through `strtof`, so the boundaries don't drift on deeper levels. (If I used `double` instead it would be `%.17g`, but then parent and child must also use `double` everywhere. Staying with `float`.)
+Die Grenzen werden den Kindern als Text übergeben. Mit `%.9g` ausgeben, dann liefert `strtof` exakt denselben `float` zurück und die Grenzen driften in tieferen Ebenen nicht.
 
-<br>
+---
 
-## Algorithm (one process)
+## 4. Pseudocode
 
-1. check `argc`, parse args, read `stdin` until EOF, parse + validate every line
-2. base cases (0 lines / 1 line / dedup -> maybe 1 line)
-3. compute pivot + the 4 limits
-4. per child (BL, BR, TL, TR): create the 2 pipes, `fork`. This step only STARTS the 4 children, no writing / reading / waiting yet (see "Step 4 in detail")
-5. in the child: close parent-side ends, `dup2`, close the originals, `execlp`
-6. in the parent: write the lines of each quadrant into its child, close the write ends
-7. read the results in the order BL, BR, TL, TR and copy them to `stdout`
-8. `waitpid` for all 4, check the exit status
+Schreibweise: `←` ist Zuweisung, `=` ist Vergleich, `//` ist Kommentar.
 
-<br>
-
-## Step 4 in detail
-
-- "per child" = per quadrant 2 pipes (A: parent -> child, B: child -> parent) -> 8 pipes and 4 forks in total
-- keep everything in arrays with 1 slot per quadrant, index 0..3 = BL, BR, TL, TR (pipe ends of A, pipe ends of B, pid). Same index everywhere, so the pipes never get mixed up.
-- the loop over the 4 quadrants only starts the processes: create pipes -> `fork` -> next quadrant. NO write, read or `wait` inside this loop.
-- only when all 4 children exist: feed them (step 6) -> read from them (step 7) -> wait for them (step 8)
-- why: if I do the whole cycle per child (fork -> feed -> read -> wait) before starting the next one, the children run one after another. The assignment says they must run simultaneously.
-- the order BL, BR, TL, TR for the forks doesn't change the result, the output order only comes from the order of reading in step 7
-- **in the parent, right after each `fork`: close the child's ends** (read end of A, write end of B). Then later children inherit fewer stray ends.
-- inherited ends: when forking child 2, the parent still has the parent-side ends of child 1 open (write end of A, read end of B) and child 2 gets a copy of them. If child 2 keeps them, child 1 never sees EOF -> hang. So in every child, FIRST close all parent-side ends (its own and those of the earlier children), THEN `dup2` its own two ends, close the originals, `execlp`.
-
-<br>
-
-## Pipes (per child)
+### 4.1 Hilfsfunktionen
 
 ```
-parent --write--> [pipe A] --read--> child stdin
-parent <--read--- [pipe B] <--write-- child stdout
+Funktion ParsePunkt(text) → (ok, x, y)
+    entferne ein abschließendes '\n' von text
+    suche das Komma in text
+    wenn kein Komma vorhanden dann
+        gib (falsch, 0, 0) zurück
+    x ← strtof(Teil vor dem Komma)
+    y ← strtof(Teil nach dem Komma)
+    wenn x oder y nicht vollständig gelesen wurde (endptr ≠ Ende) dann
+        gib (falsch, 0, 0) zurück
+    gib (wahr, x, y) zurück
 ```
 
-Child, before `execlp` (same program again via `argv[0]`, args = same goal + distance + its own 4 limits):
-- close the parent-side ends of its own pipes and of all earlier children (they get inherited!)
-- `dup2` read end of A -> `STDIN_FILENO`
-- `dup2` write end of B -> `STDOUT_FILENO`
-- close the original ends of A and B
-- if `execlp` fails -> error message, `EXIT_FAILURE` (use `_exit`/`exit` so the parent's buffered stdio output is not flushed twice; nothing should be buffered at that point anyway)
+Dieselbe Funktion wird für das Ziel **und** für jede Eingabezeile benutzt. `"1,"` schlägt fehl (Testcase 09).
 
-Parent:
-- close the read end of A and the write end of B of each child right after its `fork`
-- write the lines of the quadrant into A (raw text + `\n`), then close A. The child only sees EOF after that, and only then it can continue.
-- read B in the fixed order, copy to `stdout` until EOF. No parsing needed, it already is the final format.
-- **SIGPIPE:** if a child dies early, `write` into its pipe raises SIGPIPE and kills the parent. Use `signal(SIGPIPE, SIG_IGN)` at the start (stays ignored across `exec`, fine) and treat `EPIPE` as an error.
-- **I/O (guideline 29):** don't mix stdio and `read`/`write` on the same fd. `getline` on `stdin` + `write(2)` on the pipe fds is fine (different fds). For reading B either `read(2)` + `write(2)` to fd 1, or `fdopen` + stdio, but be consistent per fd. If I print the leaf result with `printf`, `fflush`/exit properly before the process ends.
+```
+Funktion Distanz(x, y, goal_x, goal_y) → float
+    gib sqrtf( powf(x − goal_x, 2) + powf(y − goal_y, 2) ) zurück
+```
 
-Hang = most likely a write end that is still open somewhere. Every process closes every end it doesn't use.
+Die Distanz gilt immer zum **Ziel**, nie zur Mitte (Pivot).
 
-Children must run simultaneously: fork all 4 -> feed all 4 -> read all 4 -> wait. NOT fork one -> wait -> fork next.
+```
+Funktion Quadrant(x, y, mid_x, mid_y) → {0, 1, 2, 3}
+    links ← (x ≤ mid_x)
+    unten ← (y ≤ mid_y)
+    wenn unten und links dann gib 0 zurück     // BL
+    wenn unten dann           gib 1 zurück     // BR
+    wenn links dann           gib 2 zurück     // TL
+    gib 3 zurück                               // TR
+```
 
-**Deadlock check (done):** feeding the 4 children one after another cannot deadlock, because every process reads its whole `stdin` to EOF before it produces any output. A child therefore never blocks on writing while the parent is still feeding it, and the parent reads the results only after all inputs are closed.
+```
+Funktion EntferneDuplikate(zeilen) → zeilen'
+    erste ← zeilen[0]
+    ergebnis ← [erste]                          // die erste Zeile bleibt genau einmal
+    für i von 1 bis Länge(zeilen) − 1 tue
+        wenn zeilen[i].x ≠ erste.x oder zeilen[i].y ≠ erste.y dann
+            hänge zeilen[i] an ergebnis an
+    gib ergebnis zurück
+```
 
-<br>
+Es wird mit den **Zahlenwerten** verglichen, nicht mit dem Text (`1.0,1` = `1,1`). Nur Duplikate der **ersten** Zeile fliegen raus. Duplikate anderer Punkte laufen weiter nach unten und werden dort entfernt, wenn sie in einem Kind die erste Zeile sind.
 
-## Exit status + error path
+```
+Prozedur PruefeUndGibAus(zeile, goal_x, goal_y, distance)
+    d ← Distanz(zeile.x, zeile.y, goal_x, goal_y)
+    wenn d ≤ distance dann
+        schreibe  "%.3f: <zeile.text>\n"  auf stdout    // Originaltext der Zeile!
+```
 
-- `waitpid` for all 4 children. If one of them is not `EXIT_SUCCESS` (or didn't exit normally) -> `EXIT_FAILURE`
-- otherwise `EXIT_SUCCESS`
-- free everything (the line array), check return values of `fork`, `pipe`, `dup2`, `execlp`, `write`, `malloc`/`realloc`
-- **failure after some children already started** (`pipe`/`fork` fails, `write` fails): don't just `exit`. Close all remaining pipe ends (children then see EOF and end by themselves, no `kill`!), `waitpid` for every child that was already forked, free memory, then `EXIT_FAILURE`. One cleanup function for this, used by all error paths after step 4. No zombies, no orphans.
-- error/debug output only to `stderr`. Debug prints only under `#ifdef DEBUG` (`-DDEBUG`), never unconditionally.
+### 4.2 Hauptprogramm (ein Prozess = eine Ebene)
 
-<br>
+```
+Prozedur main(argc, argv)
 
-## Resolved questions
+    // ---------- Schritt 1: Argumente ----------
+    SIGPIPE ignorieren
+    wenn argc ≠ 7 dann
+        schreibe Usage (mit argv[0]) auf stdout
+        beende mit EXIT_FAILURE
 
-| Question | Answer |
+    (ok, goal_x, goal_y) ← ParsePunkt(argv[1])
+    distance, min_x, max_x, min_y, max_y ← strtof(argv[2..6])
+    wenn irgendetwas nicht parst dann
+        schreibe Fehlermeldung (mit argv[0]) auf stderr
+        beende mit EXIT_FAILURE
+
+    // ---------- Schritt 2: Eingabe lesen und prüfen ----------
+    zeilen ← leere dynamische Liste
+    solange eine Zeile aus stdin gelesen werden kann (bis EOF) tue
+        (ok, x, y) ← ParsePunkt(zeile)
+        wenn nicht ok dann
+            schreibe Fehlermeldung auf stderr
+            beende mit EXIT_FAILURE          // noch KEINE Kinder gestartet, nichts aufzuräumen
+        hänge (text = zeile, x, y) an zeilen an
+
+    // ---------- Schritt 3: Abbruchfälle (hier endet die Rekursion) ----------
+    wenn Länge(zeilen) = 0 dann
+        beende mit EXIT_SUCCESS              // leerer Quadrant, keine Ausgabe
+
+    zeilen ← EntferneDuplikate(zeilen)
+
+    wenn Länge(zeilen) = 1 dann
+        PruefeUndGibAus(zeilen[0], goal_x, goal_y, distance)
+        beende mit EXIT_SUCCESS
+
+    // ---------- Schritt 4: rekursiver Fall (mehr als 1 verschiedene Zeile) ----------
+    mid_x ← (min_x + max_x) / 2
+    mid_y ← (min_y + max_y) / 2
+
+    grenzen[0] ← (min_x, mid_x, min_y, mid_y)     // BL
+    grenzen[1] ← (mid_x, max_x, min_y, mid_y)     // BR
+    grenzen[2] ← (min_x, mid_x, mid_y, max_y)     // TL
+    grenzen[3] ← (mid_x, max_x, mid_y, max_y)     // TR
+
+    // Phase A: alle 4 Kinder STARTEN (noch nichts schreiben/lesen/warten!)
+    für i von 0 bis 3 tue
+        pipeA[i] ← pipe()                          // Eltern → Kind
+        pipeB[i] ← pipe()                          // Kind → Eltern
+        pid[i]   ← fork()
+
+        wenn pid[i] < 0 dann
+            Aufräumen(); beende mit EXIT_FAILURE
+
+        wenn pid[i] = 0 dann                       // ----- wir sind das KIND -----
+            // zuerst ALLE geerbten Eltern-Enden schließen (eigene und die der früheren Kinder)
+            für j von 0 bis i tue
+                schließe pipeA[j].schreiben
+                schließe pipeB[j].lesen
+            dup2(pipeA[i].lesen,     STDIN)
+            dup2(pipeB[i].schreiben, STDOUT)
+            schließe pipeA[i].lesen
+            schließe pipeB[i].schreiben
+            execlp(argv[0], argv[0], argv[1], argv[2], grenzen[i] als Text ...)
+            // nur wenn exec fehlschlägt:
+            schreibe Fehlermeldung auf stderr
+            _exit(EXIT_FAILURE)
+
+        // ----- wir sind noch der ELTERNPROZESS -----
+        schließe pipeA[i].lesen                    // das gehört dem Kind
+        schließe pipeB[i].schreiben                // das gehört dem Kind
+
+    // Phase B: jedem Kind seine Punkte schicken
+    für i von 0 bis 3 tue
+        für jede zeile in zeilen tue
+            wenn Quadrant(zeile.x, zeile.y, mid_x, mid_y) = i dann
+                write(pipeA[i].schreiben, zeile.text + "\n")
+        schließe pipeA[i].schreiben                // Kind sieht jetzt EOF und kann loslegen
+
+    // Phase C: Ergebnisse in fester Reihenfolge einsammeln
+    für i von 0 bis 3 tue                          // BL → BR → TL → TR
+        solange read(pipeB[i].lesen) Daten liefert tue
+            write(STDOUT, Daten)                   // unverändert durchreichen
+        schließe pipeB[i].lesen
+
+    // Phase D: auf alle Kinder warten
+    fehler ← falsch
+    für i von 0 bis 3 tue
+        waitpid(pid[i], status)
+        wenn Kind nicht normal beendet oder status ≠ EXIT_SUCCESS dann
+            fehler ← wahr
+
+    gib zeilen frei
+    wenn fehler dann beende mit EXIT_FAILURE
+    beende mit EXIT_SUCCESS
+```
+
+### 4.3 Aufräumen bei Fehlern (nach dem Start von Kindern)
+
+Ein einziger Aufräum-Pfad für alle Fehler ab Phase A (`pipe`/`fork`/`write` schlägt fehl):
+
+```
+Prozedur Aufräumen()
+    schließe alle noch offenen Pipe-Enden        // Kinder sehen EOF und beenden sich selbst, KEIN kill!
+    für jedes bereits gestartete Kind tue
+        waitpid(pid)                             // keine Zombies
+    gib zeilen frei
+```
+
+---
+
+## 5. Ablauf an einem Beispiel
+
+`./quadtree 0,0 4.5 -10 10 -10 10 < 1.txt` mit den Punkten `1,1`, `2,-2`, `-3,3`, `-4,-4`:
+
+```
+Prozess 1 (Grenzen -10..10, 4 Zeilen) → mid = 0,0
+ ├─ BL-Kind bekommt -4,-4 → 1 Zeile: Distanz 5.66 > 4.5 → gibt nichts aus
+ ├─ BR-Kind bekommt  2,-2 → 1 Zeile: gibt "2.828: 2,-2" aus
+ ├─ TL-Kind bekommt -3,3  → 1 Zeile: gibt "4.243: -3,3" aus
+ └─ TR-Kind bekommt  1,1  → 1 Zeile: gibt "1.414: 1,1" aus
+Prozess 1 liest BL, BR, TL, TR in dieser Reihenfolge und gibt alles aus
+```
+
+Die Reihenfolge `2.828`, `4.243`, `1.414` in der Angabe kommt also **nicht** von der Distanz, sondern von der Quadranten-Reihenfolge. Bekommt ein Kind mehr als 1 Zeile, macht es dasselbe noch einmal mit seinem kleineren Rechteck und startet 4 eigene Kinder.
+
+---
+
+## 6. Pipes im Überblick
+
+Pro Kind gibt es 2 Pipes, insgesamt also 8 Pipes und 4 `fork`s:
+
+```
+Eltern --schreibt--> [Pipe A] --liest--> stdin  des Kindes
+Eltern <--liest----- [Pipe B] <--schreibt-- stdout des Kindes
+```
+
+Alles liegt in Arrays mit einem Platz pro Quadrant (Index 0..3 = BL, BR, TL, TR). Mit demselben Index überall werden die Pipes nie vertauscht.
+
+---
+
+## 7. Typische Fehler (hier bleibt man meistens hängen)
+
+1. **Pipe-Enden nicht geschlossen.** Ein Kind sieht erst EOF, wenn *alle* Schreib-Enden seiner Eingabe-Pipe zu sind. Kind 2 erbt aber die offenen Eltern-Enden von Kind 1. Darum schließt jedes Kind **zuerst** alle Eltern-Enden, **dann** `dup2`, dann die Originale schließen, dann `execlp`. Die Eltern schließen die Kind-Enden direkt nach jedem `fork`.
+2. **Kinder nacheinander statt gleichzeitig.** Wer pro Kind forkt, füttert, liest und wartet, lässt die Kinder hintereinander laufen. Die Angabe verlangt aber gleichzeitiges Laufen. Richtig ist: alle 4 forken → alle 4 füttern → alle 4 lesen → alle 4 `waitpid`.
+3. **Kein Deadlock beim Füttern.** Jeder Prozess liest seine ganze Eingabe bis EOF, bevor er etwas ausgibt. Ein Kind blockiert also nie beim Schreiben, während die Eltern noch füttern.
+4. **Falsche Lesereihenfolge.** Immer BL, BR, TL, TR.
+5. **`<` statt `<=`.** Dann stimmt Testcase 03 nicht.
+6. **Endlose Rekursion bei Duplikaten.** Ohne Entfernen der Duplikate der ersten Zeile hört `1,1` + `1,1` nie auf.
+7. **SIGPIPE.** Stirbt ein Kind früh, tötet ein `write` in dessen Pipe sonst die Eltern. Darum am Anfang `signal(SIGPIPE, SIG_IGN)` und `EPIPE` als Fehler behandeln.
+8. **stdio und `read`/`write` mischen.** Pro Dateideskriptor eines von beiden benutzen (Guideline 29). `getline` auf `stdin` plus `write` auf die Pipe-Fds ist in Ordnung, weil das verschiedene Fds sind.
+9. **Debug-Ausgaben.** Nur unter `#ifdef DEBUG`, sonst scheitert der automatische Test.
+
+---
+
+## 8. Entscheidungen, die nicht in der Angabe stehen
+
+| Frage | Antwort |
 |---|---|
-| Order of the limits | `min_x max_x min_y max_y` (SYNOPSIS) |
-| What happens to the first line | kept once, only later equal lines are dropped |
-| All lines identical | the one remaining line is checked + printed if in range ("additional-1") |
-| Points on the pivot line | `<=` -> left / bottom (testcase 03) |
-| 0 lines | no output, `EXIT_SUCCESS` (natural reading, not specified) |
-| Wrong `argc` | usage on `stdout`, `EXIT_FAILURE` (testcase 08) |
-| Malformed line like `1,` | error on `stderr`, `EXIT_FAILURE` (testcase 09) |
+| Reihenfolge der Grenzen | `min_x max_x min_y max_y` (laut SYNOPSIS) |
+| 0 Zeilen | keine Ausgabe, `EXIT_SUCCESS` (natürliche Lesart, leere Quadranten sind normal) |
+| Erste Zeile bei Duplikaten | bleibt genau einmal erhalten, nur spätere gleiche Zeilen fallen weg |
+| Alle Zeilen gleich | die eine übrige Zeile wird wie der 1-Zeilen-Fall geprüft und ausgegeben („additional-1“) |
+| Punkt auf der Mittellinie | `<=` → links bzw. unten (Testcase 03) |
+| falsche `argc` | Usage auf stdout, `EXIT_FAILURE` (Testcase 08) |
+| fehlerhafte Zeile wie `1,` | Fehler auf stderr, `EXIT_FAILURE`, **vor** jedem `fork` (Testcase 09) |
 
-Still open (optional, ask tutor): "additional-2" expects `2.828: 2,2` for distance 1.5 from the origin, which can't be right (`2,2` is 2.828 away). Its commands are also malformed (`echo -n` with `\n`, `>` instead of `|`). Not run by the submission system, so not treated as ground truth.
+Die Angabe sagt bei „alle Zeilen gleich“ nur „exit with EXIT_SUCCESS“, ohne etwas auszugeben. „additional-1“ erwartet aber `1.414: 1,1`, also gilt die Lesart oben.
 
-<br>
+Offen (optional beim Tutor nachfragen): „additional-2“ erwartet `2.828: 2,2` bei Distanz 1.5 vom Ursprung, das kann nicht stimmen (`2,2` ist 2.828 entfernt). Die Befehle dort sind auch kaputt (`echo -n` mit `\n`, `>` statt `|`). Der Test wird nicht automatisch geprüft.
 
-## Order to build it
+---
 
-1. parse args (+ usage) + `parse_point` + read `stdin`, 1 line case works already (leaf, incl. testcases 01, 08, 09)
-2. dedup + split without any processes, just print which quadrant each line goes to (check `<=` rule)
-3. 1 child with both pipes, get a line through and back
-4. 4 children at the same time + merge in order BL, BR, TL, TR
-5. exit status + error handling + cleanup path + SIGPIPE
-6. Makefile, doc comments, `-DDEBUG` only for debug output
+## 9. In dieser Reihenfolge bauen
 
-<br>
+1. Argumente (+ Usage) + `ParsePunkt` + `stdin` lesen. Der 1-Zeilen-Fall funktioniert damit schon (Testcases 01, 08, 09).
+2. Duplikate entfernen und Quadranten **ohne Prozesse** bestimmen (nur ausgeben, in welchen Quadranten jede Zeile geht, und die `<=`-Regel prüfen).
+3. **Ein** Kind mit beiden Pipes: eine Zeile hin und wieder zurück.
+4. **Vier** Kinder gleichzeitig + Ausgabe in der Reihenfolge BL, BR, TL, TR.
+5. Exit-Status, Aufräum-Pfad, SIGPIPE.
+6. Makefile, Doxygen-Kommentare, `-DDEBUG` nur für Debug-Ausgaben.
 
-## Build / style checklist
+---
 
-- compile: `gcc -std=c99 -pedantic -Wall -D_DEFAULT_SOURCE -D_BSD_SOURCE -D_SVID_SOURCE -D_POSIX_C_SOURCE=200809L -g -c quadtree.c` without warnings; link with `-lm`
-- Makefile: `all` first target, `clean` idempotent, header with author + program name
-- Doxygen header per file (`@author`, `@brief`, `@details`, `@date`), every function (also `static`) documented
-- constants as macros (initial array capacity, number of args = 7, number of children = 4, indices BL/BR/TL/TR), no globals
-- no `scanf`, `atoi`, `gets`
+## 10. Checkliste Stil und Build
 
-<br>
+- Compilieren ohne Warnungen: `gcc -std=c99 -pedantic -Wall -D_DEFAULT_SOURCE -D_BSD_SOURCE -D_SVID_SOURCE -D_POSIX_C_SOURCE=200809L -g -c quadtree.c`, linken mit `-lm`.
+- Makefile: `all` als erstes Target, `clean` idempotent, Header mit Autor und Programmname.
+- Doxygen-Header pro Datei (`@author`, `@brief`, `@details`, `@date`) und jede Funktion (auch `static`) dokumentiert.
+- Konstanten als Makros (Start-Kapazität des Arrays, Anzahl Argumente = 7, Anzahl Kinder = 4, Indizes BL/BR/TL/TR), keine globalen Variablen.
+- Kein `scanf`, `atoi`, `gets`.
+- Rückgabewerte von `fork`, `pipe`, `dup2`, `execlp`, `write`, `malloc`/`realloc` prüfen.
+- Fehler- und Debugausgaben nur auf `stderr`.
 
-## Tests
+---
 
-- all testcases 01-09 from the assignment, incl. exit codes (`echo $?`)
-- testcase 03 first: it is the one that checks the boundary rule and the output order
-- `./quadtree 0,0 4.5 -10 10 -10 10 < 1.txt` -> `2.828: 2,-2`, `4.243: -3,3`, `1.414: 1,1` (this order = BR, TL, TR)
-- same with `| sort`, compare with `diff`
-- empty input, 1 line, 2 identical lines (`1,1` twice -> `1.414: 1,1` for goal 0,0 distance 1.5), points on the center lines, bad args (no comma, letters, wrong `argc`), malformed line in the middle of the input (must fail before any fork)
-- "additional" 2500 / 10000 points only after the rest works (deep recursion, many processes)
-- `strace -f` to see the forks and pipes, `valgrind --trace-children=yes` for leaks and unclosed fds (`--track-fds=yes`)
-- after every run: `pgrep quadtree` must show nothing (no zombies / hanging children)
+## 11. Testen
+
+- Alle Testcases 01–09 aus der Angabe, auch die Exit-Codes (`echo $?`). Testcase 03 zuerst, weil er Randregel und Reihenfolge prüft.
+- `./quadtree 0,0 4.5 -10 10 -10 10 < 1.txt` → `2.828: 2,-2`, `4.243: -3,3`, `1.414: 1,1`.
+- Dasselbe mit `| sort` und mit `diff` vergleichen.
+- Eigene Fälle: leere Eingabe, 1 Zeile, 2 gleiche Zeilen (`1,1` zweimal → `1.414: 1,1` bei Ziel 0,0 und Distanz 1.5), Punkte auf den Mittellinien, falsche Argumente (kein Komma, Buchstaben, falsche `argc`), kaputte Zeile mitten in der Eingabe (muss vor jedem `fork` scheitern).
+- Die „additional“-Tests mit 2500 und 10000 Punkten erst, wenn alles andere läuft.
+- `strace -f` zeigt Forks und Pipes, `valgrind --trace-children=yes --track-fds=yes` zeigt Leaks und offene Fds.
+- Nach jedem Lauf: `pgrep quadtree` darf nichts anzeigen (keine Zombies oder hängenden Kinder).
