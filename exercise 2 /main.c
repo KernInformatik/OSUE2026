@@ -10,11 +10,13 @@
  */
 
 #include "common.h"
-#include <stddef.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <sys/types.h>
-#include <unistd.h>
+
+typedef struct Point
+{
+    float x;
+    float y;
+    char *line
+} Point;
 
 void usage()
 {
