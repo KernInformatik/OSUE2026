@@ -10,6 +10,8 @@
  */
 
 #include "common.h"
+#include <float.h>
+#include <limits.h>
 #include <math.h>
 #include <stddef.h>
 #include <stdio.h>
@@ -21,8 +23,7 @@
 
 void usage()
 {
-    printf("quadtree <goal> <distance> <min_x> <max_x> <min_y> <max_y>\n");
-    error_exit("Wrong Input...Exiting\n");
+    printf("./quadtree <goal> <distance> <min_x> <max_x> <min_y> <max_y>\n");
 }
 
 /**
@@ -90,13 +91,19 @@ int main(int argc, char **argv)
     float goal_x = 0, goal_y = 0, min_x = 0, max_x = 0, max_y = 0, min_y = 0, distance = 0;
 
     char *goal = strdup(argv[1]);
-    char *end = NULL;
+    char *end1 = NULL, *end2 = NULL;
 
-    // goal_x = strtof(goal, &end);
-    // goal_y = strtof(end + 1, NULL);
+    goal_x = strtof(goal, &end1);
+    goal_y = strtof(end1 + 1, &end2);
 
-    goal_x = strtof(strtok_r(goal, ",", &end), NULL);
-    goal_y = strtof(strtok_r(NULL, ",", &end), NULL);
+    if (goal == end1 || end1 + 1 == end2 || *end1 == ',' || *end2 != '\0' || goal_x > FLT_MAX || goal_y > FLT_MAX ||
+        errno == ERANGE)
+    {
+        free(goal);
+        usage();
+        error_exit("Couldn't parse values from input");
+    }
+
     distance = strtof(argv[2], NULL);
     min_x = strtof(argv[3], NULL);
     max_x = strtof(argv[4], NULL);
@@ -126,12 +133,21 @@ int main(int argc, char **argv)
         char *line = NULL;
         size_t size = 0;
         ssize_t nread = 0;
-        char *end;
+        char *endPtr;
         while ((nread = getline(&line, &size, stdin)) != -1)
         {
             char *tmp = strdup(line);
-            input_x = strtod(strtok(tmp, ","), NULL);
-            input_y = strtod(strtok(NULL, ","), NULL);
+            // input_x = strtof(strtok_r(tmp, ",", &end), NULL);
+            // input_y = strtof(strtok_r(NULL, ",", &end), NULL);
+            input_x = strtof(tmp, &endPtr);
+            input_y = strtof(endPtr + 1, NULL);
+            if (tmp == endPtr || *endPtr != '\0' || input_x > FLT_MAX || input_y > FLT_MAX)
+            {
+                free(tmp);
+                usage();
+                error_exit("Couldn't parse values from input");
+            }
+
             // input_x = strtof(tmp, &end);
             // input_y = strtof(end + 1, NULL);
             free(tmp);
@@ -148,6 +164,7 @@ int main(int argc, char **argv)
         n = 0;
     }
 
+    /*Fork recursion begins here*/
     if (n > 1)
     {
     }
