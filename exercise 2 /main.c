@@ -11,6 +11,13 @@
 
 #include "common.h"
 #include <math.h>
+#include <stddef.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/poll.h>
+#include <sys/types.h>
+#include <unistd.h>
 
 void usage()
 {
@@ -18,39 +25,38 @@ void usage()
     error_exit("Wrong Input...Exiting\n");
 }
 
-static inline int countLines(char *s)
+/**
+ * @brief counts the number of lines in a given file
+ *
+ * @param s
+ * @return int
+ */
+static inline int countLines(FILE *s)
 {
-    if (s == NULL)
+    if (s == NULL || s != stdin)
     {
-        error_exit("Invalid input, exiting!");
+        fclose(s);
+        error_exit("Invalid input or no input given");
     }
-    int c = 0, nl = 0;
+    int rv = 0;
 
-    while ((c = getchar()) != EOF)
+    while (!feof(s))
     {
+        int c = fgetc(s);
         if (c == '\n')
         {
-            nl++;
+            rv++;
         }
     }
-    c = 0;
-    return nl;
+
+    return rv + 1;
 }
 
-float parseInput(int argc, char **argv)
+double distanceToGoal(float x, float y, float goal_x, float goal_y)
 {
-    if (argc != 7)
-    {
-        usage();
-        error_exit("Not enough arguments, exiting");
-    }
-
-    return 0.0;
-}
-
-float distance(float x, float y, float goal_x, float goal_y)
-{
-    return sqrtf(powf(x - goal_x, 2) + powf(y - goal_y, 2));
+    double dx = (double)x - goal_x;
+    double dy = (double)y - goal_y;
+    return sqrt(dx * dx + dy * dy);
 }
 
 /**
@@ -63,33 +69,88 @@ float distance(float x, float y, float goal_x, float goal_y)
 int main(int argc, char **argv)
 {
 
-    char *line = NULL;
-    size_t size = 0;
-    ssize_t nread;
-
-    if (argc < 7 || argc > 7)
+    if (argc != 7)
     {
         usage();
         error_exit("Not enough arguments, exiting");
     }
 
-    if (argc != 2)
+    struct pollfd fds;
+    int check = 0;
+    fds.fd = 0;
+    fds.events = POLLIN;
+    check = poll(&fds, 1, 0);
+
+    if (check != 1)
     {
-        size = 0;
-        nread = 0;
+        printf("nothing to do, no points given... exiting");
+        exit(EXIT_SUCCESS);
+    }
+
+    float goal_x = 0, goal_y = 0, min_x = 0, max_x = 0, max_y = 0, min_y = 0, distance = 0;
+
+    char *goal = strdup(argv[1]);
+    char *end = NULL;
+
+    // goal_x = strtof(goal, &end);
+    // goal_y = strtof(end + 1, NULL);
+
+    goal_x = strtof(strtok_r(goal, ",", &end), NULL);
+    goal_y = strtof(strtok_r(NULL, ",", &end), NULL);
+    distance = strtof(argv[2], NULL);
+    min_x = strtof(argv[3], NULL);
+    max_x = strtof(argv[4], NULL);
+    min_y = strtof(argv[5], NULL);
+    max_y = strtof(argv[6], NULL);
+
+    float mid_x = (min_x + max_x) / 2;
+    float mid_y = (min_y + max_y) / 2;
+
+    printf("Parsed input:\n%.2f %.2f %.2f %.2f %.2f %.2f %.2f \nmidx: %f\nmidy: %f", goal_x, goal_y, distance, min_x,
+           max_x, min_y, max_y, mid_x, mid_y);
+
+    printf("%s\n", goal);
+    free(goal);
+
+    int n = countLines(stdin);
+    if (fseek(stdin, 0, SEEK_SET) != 0)
+    {
+        error_exit("stdin is not seekable (piped input?)");
+    }
+    printf("argc: %d\nlines: %d\n", argc, n);
+    float input_x = 0, input_y = 0;
+
+    if (n == 1)
+    {
+
+        char *line = NULL;
+        size_t size = 0;
+        ssize_t nread = 0;
+        char *end;
+        while ((nread = getline(&line, &size, stdin)) != -1)
+        {
+            char *tmp = strdup(line);
+            input_x = strtod(strtok(tmp, ","), NULL);
+            input_y = strtod(strtok(NULL, ","), NULL);
+            // input_x = strtof(tmp, &end);
+            // input_y = strtof(end + 1, NULL);
+            free(tmp);
+        }
+
+        float n = distanceToGoal(input_x, input_y, goal_x, goal_y);
+        printf("distance: %f\ninputx: %f\ninputy: %f\n", n, input_x, input_y);
+
+        if (n <= distance)
+        {
+            printf("%.3f: %s\n", n, line);
+        }
         free(line);
-        fflush(stdout);
-        usage();
-        fprintf(stderr, "Error occured");
-        exit(EXIT_FAILURE);
+        n = 0;
     }
 
-    while ((nread = getline(&line, &size, fopen(argv[1], "r"))) != -1)
+    if (n > 1)
     {
     }
 
-    size = 0;
-    nread = 0;
-    free(line);
     exit(EXIT_SUCCESS);
 }
