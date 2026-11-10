@@ -10,6 +10,7 @@
  */
 
 #include "common.h"
+#include <math.h>
 
 void usage()
 {
@@ -38,13 +39,18 @@ static inline int countLines(char *s)
 
 float parseInput(int argc, char **argv)
 {
-    if (argc < 7 || argc > 7)
+    if (argc != 7)
     {
         usage();
         error_exit("Not enough arguments, exiting");
     }
 
     return 0.0;
+}
+
+float distance(float x, float y, float goal_x, float goal_y)
+{
+    return sqrtf(powf(x - goal_x, 2) + powf(y - goal_y, 2));
 }
 
 /**
@@ -60,6 +66,12 @@ int main(int argc, char **argv)
     char *line = NULL;
     size_t size = 0;
     ssize_t nread;
+
+    if (argc < 7 || argc > 7)
+    {
+        usage();
+        error_exit("Not enough arguments, exiting");
+    }
 
     if (argc != 2)
     {
