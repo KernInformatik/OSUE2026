@@ -10,6 +10,7 @@
  */
 
 #include "common.h"
+#include <assert.h>
 #include <float.h>
 #include <limits.h>
 #include <math.h>
@@ -84,7 +85,7 @@ int main(int argc, char **argv)
 
     if (check != 1)
     {
-        printf("nothing to do, no points given... exiting");
+        printf("nothing to do, no points given... exiting\n");
         exit(EXIT_SUCCESS);
     }
 
@@ -96,12 +97,12 @@ int main(int argc, char **argv)
     goal_x = strtof(goal, &end1);
     goal_y = strtof(end1 + 1, &end2);
 
-    if (goal == end1 || end1 + 1 == end2 || *end1 == ',' || *end2 != '\0' || goal_x > FLT_MAX || goal_y > FLT_MAX ||
+    if (goal_x != 0.0F || goal_y != 0.0F || *end1 != ',' || *end2 != '\0' || goal_x > FLT_MAX || goal_y > FLT_MAX ||
         errno == ERANGE)
     {
         free(goal);
         usage();
-        error_exit("Couldn't parse values from input");
+        error_exit("Couldn't parse values from input, maybe use a valid goal?");
     }
 
     distance = strtof(argv[2], NULL);
@@ -113,17 +114,21 @@ int main(int argc, char **argv)
     float mid_x = (min_x + max_x) / 2;
     float mid_y = (min_y + max_y) / 2;
 
-    printf("Parsed input:\n%.2f %.2f %.2f %.2f %.2f %.2f %.2f \nmidx: %f\nmidy: %f", goal_x, goal_y, distance, min_x,
+    printf("Parsed input:\n%.2f %.2f %.2f %.2f %.2f %.2f %.2f \nmidx: %f\nmidy: %f\n", goal_x, goal_y, distance, min_x,
            max_x, min_y, max_y, mid_x, mid_y);
 
-    printf("%s\n", goal);
     free(goal);
 
     int n = countLines(stdin);
     if (fseek(stdin, 0, SEEK_SET) != 0)
     {
         fflush(stdout);
+<<<<<<< HEAD
         error_exit("stdin is not seekable (piped input?)");
+=======
+        fprintf(stdout, "stdin is not seekable (piped input?)");
+        exit(EXIT_SUCCESS);
+>>>>>>> 15ab616014a7174a4671dd3f706eaf7d2adc3a54
     }
     printf("argc: %d\nlines: %d\n", argc, n);
     float input_x = 0, input_y = 0;
@@ -134,23 +139,18 @@ int main(int argc, char **argv)
         char *line = NULL;
         size_t size = 0;
         ssize_t nread = 0;
-        char *endPtr;
+        char *endPtr1, *endPtr2;
         while ((nread = getline(&line, &size, stdin)) != -1)
         {
             char *tmp = strdup(line);
-            // input_x = strtof(strtok_r(tmp, ",", &end), NULL);
-            // input_y = strtof(strtok_r(NULL, ",", &end), NULL);
-            input_x = strtof(tmp, &endPtr);
-            input_y = strtof(endPtr + 1, NULL);
-            if (tmp == endPtr || *endPtr != '\0' || input_x > FLT_MAX || input_y > FLT_MAX)
+            input_x = strtof(tmp, &endPtr1);
+            input_y = strtof(endPtr1 + 1, &endPtr2);
+            if (tmp == endPtr1 || *endPtr1 != ',' || *endPtr2 != '\0' || input_x > FLT_MAX || input_y > FLT_MAX)
             {
                 free(tmp);
                 usage();
                 error_exit("Couldn't parse values from input");
             }
-
-            // input_x = strtof(tmp, &end);
-            // input_y = strtof(end + 1, NULL);
             free(tmp);
         }
 
