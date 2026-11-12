@@ -122,6 +122,7 @@ int main(int argc, char **argv)
     int n = countLines(stdin);
     if (fseek(stdin, 0, SEEK_SET) != 0)
     {
+        fflush(stdout);
         error_exit("stdin is not seekable (piped input?)");
     }
     printf("argc: %d\nlines: %d\n", argc, n);
