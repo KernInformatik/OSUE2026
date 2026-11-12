@@ -123,12 +123,8 @@ int main(int argc, char **argv)
     if (fseek(stdin, 0, SEEK_SET) != 0)
     {
         fflush(stdout);
-<<<<<<< HEAD
-        error_exit("stdin is not seekable (piped input?)");
-=======
         fprintf(stdout, "stdin is not seekable (piped input?)");
         exit(EXIT_SUCCESS);
->>>>>>> 15ab616014a7174a4671dd3f706eaf7d2adc3a54
     }
     printf("argc: %d\nlines: %d\n", argc, n);
     float input_x = 0, input_y = 0;
