@@ -6,24 +6,16 @@ options:
 	@echo "CFLAGS = $(CFLAGS)"
 	@echo "CC     = $(CC)"
 
-all: lib $(MAIN)
-
-lib: $(LIB_SEM_INTF)
-
-$(LIB_OBJS):$(LIB_SRCS)
-	$(CC) $(CPPFLAGS) $(CFLAGS) -fPIC -c $< -o $@
+all: $(MAIN)
 
 %.o:%.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
-$(LIB_SEM_INTF): $(LIB_OBJS)
-	$(CC) $(CFLAGS) -shared -o $@ $^ -pthread -lrt
-
-$(MAIN): $(MAIN_OBJ) $(LIB_OBJS)
-	$(CC) $(CFLAGS) -o $@ $(MAIN_OBJ) -L. -lsemaphore_interface -Wl,-rpath,'$$ORIGIN' -pthread -lrt
+$(MAIN): $(MAIN_OBJ)
+	$(CC) $(CFLAGS) -o $@ $(MAIN_OBJ)  -Wl,-rpath,'$$ORIGIN' -pthread -lrt
 
 doc:
 	doxygen Doxyfile
 
 clean:
-	rm -rf *.o $(GENERATOR) $(SUPERVISOR) *.so
+	rm -rf *.o $(MAIN) *.so

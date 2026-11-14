@@ -23,10 +23,3 @@ MAIN_OBJ := main.o
 
 # executables
 MAIN := main
-
-# library
-LIB_SEM_INTF_NAME := libsemaphore_interface.so
-LIB_SEM_INTF := $(LIB_SEM_INTF_NAME)
-
-LIB_SRCS := semaphore.c
-LIB_OBJS := libsemaphore_interface.o
