@@ -1,0 +1,25 @@
+.DEFAULT_GOAL = all
+
+# compiler
+CC := gcc
+
+# flags
+COMMON_FLAGS := -std=c99 -pedantic -Wall -O2 \
+	-D_DEFAULT_SOURCE -D_BSD_SOURCE -D_SVID_SOURCE \
+	-D_POSIX_C_SOURCE=200809L -g -lm
+
+ASAN := -fsanitize=address -fsanitize=undefined -fno-omit-frame-pointer -fno-common
+CFLAGS := $(COMMON_FLAGS) $(ASAN)
+
+
+#https://stackoverflow.com/questions/2754966/cflags-vs-cppflags
+#CPPFLAGS := -I$(INCLUDE_DIR) -I$(SRC_DIR)
+
+# source files
+MAIN_SRC := quadtree.c
+
+# object files
+MAIN_OBJ := quadtree.o
+
+# executables
+MAIN := quadtree
