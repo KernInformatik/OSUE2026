@@ -1,4 +1,5 @@
 {
   "editor.cursorSmoothCaretAnimation": "on",
-  "editor.cursorStyle": "block-outline"
+  "editor.cursorStyle": "block-outline",
+  "makefile.configureOnOpen": false
 }

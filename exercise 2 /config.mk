@@ -16,10 +16,10 @@ CFLAGS := $(COMMON_FLAGS) $(ASAN)
 #CPPFLAGS := -I$(INCLUDE_DIR) -I$(SRC_DIR)
 
 # source files
-MAIN_SRC := main.c
+MAIN_SRC := quadtree.c
 
 # object files
-MAIN_OBJ := main.o
+MAIN_OBJ := quadtree.o
 
 # executables
-MAIN := main
+MAIN := quadtree
