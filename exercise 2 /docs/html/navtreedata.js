@@ -25,38 +25,21 @@
 var NAVTREE =
 [
   [ "Quadtree", "index.html", [
-    [ "Sketching", "md_assets_2algorithm.html", [
-      [ "Args", "md_assets_2algorithm.html#autotoc_md1", null ],
-      [ "main.c should contain", "md_assets_2algorithm.html#autotoc_md2", null ],
-      [ "Base cases of one process", "md_assets_2algorithm.html#autotoc_md3", null ],
-      [ "Pre-Algorithm", "md_assets_2algorithm.html#autotoc_md4", null ],
-      [ "Algorithm (one process)", "md_assets_2algorithm.html#autotoc_md5", null ],
-      [ "Step 4 in detail", "md_assets_2algorithm.html#autotoc_md6", null ],
-      [ "Pipes (per child)", "md_assets_2algorithm.html#autotoc_md7", null ],
-      [ "Exit status", "md_assets_2algorithm.html#autotoc_md8", null ],
-      [ "Open questions (ask tutors / check assignment)", "md_assets_2algorithm.html#autotoc_md9", null ],
-      [ "Order to build it", "md_assets_2algorithm.html#autotoc_md10", null ],
-      [ "Tests", "md_assets_2algorithm.html#autotoc_md11", null ]
-    ] ],
     [ "Classes", "annotated.html", [
       [ "Class List", "annotated.html", "annotated_dup" ],
       [ "Class Index", "classes.html", null ]
     ] ],
     [ "Files", "files.html", [
-      [ "File List", "files.html", "files_dup" ],
-      [ "File Members", "globals.html", [
-        [ "All", "globals.html", null ],
-        [ "Functions", "globals_func.html", null ]
-      ] ]
+      [ "File List", "files.html", "files_dup" ]
     ] ]
   ] ]
 ];
 
 var NAVTREEINDEX =
 [
-"____semaphore__interface_8h_source.html"
+"annotated.html"
 ];
 
-var SYNCONMSG = 'click to disable panel synchronization';
-var SYNCOFFMSG = 'click to enable panel synchronization';
-var LISTOFALLMEMBERS = 'List of all members';
+const SYNCONMSG = 'click to disable panel synchronization';
+const SYNCOFFMSG = 'click to enable panel synchronization';
+const LISTOFALLMEMBERS = 'List of all members';

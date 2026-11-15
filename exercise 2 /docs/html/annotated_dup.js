@@ -1,4 +1,4 @@
 var annotated_dup =
 [
-    [ "shm", "structshm.html", null ]
+    [ "child_t", "structchild__t.html", null ]
 ];

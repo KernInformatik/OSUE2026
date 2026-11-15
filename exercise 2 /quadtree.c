@@ -27,10 +27,18 @@
 #include <unistd.h>
 #include <wait.h>
 
+/**
+ * @brief
+ *
+ */
 void usage()
 {
     fprintf(stderr, "./quadtree <goal> <distance> <min_x> <max_x> <min_y> <max_y>\n");
 }
+/**
+ * @brief
+ *
+ */
 typedef struct
 {
     pid_t pid;
@@ -38,11 +46,29 @@ typedef struct
     FILE *from;
 } child_t;
 
+/**
+ * @brief
+ *
+ * @param x
+ * @param y
+ * @param mid_x
+ * @param mid_y
+ * @return int
+ */
 static int quadrant(float x, float y, float mid_x, float mid_y)
 { /* 0 BL, 1 BR, 2 TL, 3 TR */
     return (x >= mid_x ? 1 : 0) + (y >= mid_y ? 2 : 0);
 }
 
+/**
+ * @brief
+ *
+ * @param x
+ * @param y
+ * @param goal_x
+ * @param goal_y
+ * @return double
+ */
 double distanceToGoal(float x, float y, float goal_x, float goal_y)
 {
     double dx = (double)x - goal_x;
@@ -50,6 +76,14 @@ double distanceToGoal(float x, float y, float goal_x, float goal_y)
     return sqrt(dx * dx + dy * dy);
 }
 
+/**
+ * @brief
+ *
+ * @param s
+ * @param x
+ * @param y
+ * @return int
+ */
 int parsePoint(char const *s, float *x, float *y)
 {
     char *goal = strdup(s);
@@ -71,6 +105,17 @@ int parsePoint(char const *s, float *x, float *y)
     return 0;
 }
 
+/**
+ * @brief
+ *
+ * @param children
+ * @param i
+ * @param program_name
+ * @param goal_string
+ * @param distance
+ * @param values
+ * @return int
+ */
 static int startChildren_Processes(child_t children[4], int i, char *program_name, char *goal_string, char *distance,
                                    float values[4])
 {
@@ -126,6 +171,7 @@ static int startChildren_Processes(child_t children[4], int i, char *program_nam
         {
             snprintf(s[k], sizeof(s[k]), "%.9g", values[k]);
         }
+        /*This is the recursion btw*/
         execlp(program_name, program_name, goal_string, distance, s[0], s[1], s[2], s[3], (char *)NULL);
         error_exit("Failed to exec\n");
         break;
@@ -143,6 +189,12 @@ static int startChildren_Processes(child_t children[4], int i, char *program_nam
     return 0;
 }
 
+/**
+ * @brief
+ *
+ * @param children
+ * @return int
+ */
 static int killChildren_Processes(child_t children[4])
 {
     for (int i = 0; i < 4; ++i)
@@ -176,6 +228,7 @@ static int killChildren_Processes(child_t children[4])
     }
     return 0;
 }
+
 /**
  * @brief main function, on here the main part begins for obvious reasons
  *
