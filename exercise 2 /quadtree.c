@@ -166,14 +166,35 @@ static int startChildren_Processes(child_t children[4], int i, char *program_nam
             fclose(children[k].from);
         }
         /*main part write the values in a buffer, execute the values from the buffer with execlp*/
+        /* We are in the child process (after fork). It inherited copies of the
+         * pipe FILEs of all siblings started before it (children[0..i-1]).
+         * Close them here: if this child kept a write end of a sibling's
+         * stdin pipe open, that sibling would never see EOF when the parent
+         * closes its own end, and the program would hang. */
+        for (int k = 0; k < i; ++k)
+        {
+            fclose(children[k].to);   /* write end towards sibling k */
+            fclose(children[k].from); /* read end from sibling k     */
+        }
+
+        /* exec can only pass strings as arguments, so convert the four
+         * floats of this quadrant {x_min, x_max, y_min, y_max} to text.
+         * "%.9g" (9 significant digits) is enough for a float to survive
+         * the round trip through text exactly. */
         char s[4][128];
         for (int k = 0; k < 4; k++)
         {
             snprintf(s[k], sizeof(s[k]), "%.9g", values[k]);
         }
-        /*This is the recursion btw*/
+
+        /* This is the recursion: replace this child with a fresh instance of
+         * the same program, which now only searches inside its quadrant
+         * (given by s[0..3]). */
         execlp(program_name, program_name, goal_string, distance, s[0], s[1], s[2], s[3], (char *)NULL);
+
+        /* Only reached if execlp failed, on success it never returns. */
         error_exit("Failed to exec\n");
+        break;
         break;
     default:
         /*closes the pipes redirect the events to the child*/
@@ -322,12 +343,21 @@ int main(int argc, char **argv)
             continue;
         }
 
+        /* Children are started lazily: only when a second point arrives.
+         * Until then, the first point is only buffered in `first`. */
         if (!startedChildren)
         {
             // fprintf(stdout, "%.3f: %s\n", distance, first);
 
             // fprintf(stderr, "reached child start\n");
+
+            /* Make sure the children are only started once */
             startedChildren = 1;
+
+            /* Start one child per quadrant (0 = bottom left, 1 = bottom right,
+             * 2 = top left, 3 = top right). values[i] is the rectangle
+             * {x_min, x_max, y_min, y_max} of quadrant i. The child gets it
+             * as its new search area and runs this same program again. */
             for (int i = 0; i < 4; i++)
             {
                 if (startChildren_Processes(children, i, argv[0], argv[1], argv[2], values[i]) != 0)
@@ -335,12 +365,16 @@ int main(int argc, char **argv)
                     error_exit("Error starting the child processes...exiting\n");
                 }
             }
+
+            /* The first point was only buffered so far, so now it has to be
+             * forwarded to the child whose quadrant contains it. */
             fprintf(children[quadrant(first_line_x, first_line_y, mid_x, mid_y)].to, "%s\n", first);
         }
 
+        /* Forward the current point through the pipe to the child that is
+         * responsible for its quadrant. This runs for every following point. */
         fprintf(children[quadrant(x, y, mid_x, mid_y)].to, "%s\n", line);
     }
-
     // print and use accordingly the quadrants
     free(line);
 
